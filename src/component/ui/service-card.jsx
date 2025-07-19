@@ -43,7 +43,7 @@ const ServiceCardSection = ({ onWomensSalonClick }) => {
           Home services at your doorstep
         </h2>
 
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-md w-full py-6 px-4 sm:px-6">
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-md w-full py-6 px-4 sm:px-6 text-start">
           <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-6">
             What are you looking for?
           </h3>
