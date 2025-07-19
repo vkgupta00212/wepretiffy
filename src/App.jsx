@@ -12,7 +12,9 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <BrowserRouter>
-    <Navbar />
+    <div className="mb-[80px]">
+      <Navbar />
+    </div>
     <Routes>
       {/* ✅ Valid Routes */}
       <Route path="/" element={<Index />} />

@@ -1,5 +1,4 @@
 import {
-  Sparkles,
   Instagram,
   Facebook,
   Twitter,
@@ -8,206 +7,119 @@ import {
   MapPin,
 } from "lucide-react";
 import { Button } from "../component/ui/button";
-import { Input } from "../component/ui/input";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#F5F5F5]-to-br from-primary-soft/30 to-secondary-soft/30 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Footer Content */}
-        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand Section */}
-          <div className="lg:col-span-1">
-            <div className="flex flex-col">
-              <span className="text-[35px] font-bold text-black">
-                wepretiffy
-              </span>
-              <span className="text-[16px] font-normal  mt-[-5px] text-black">
+    <footer className="bg-gradient-to-br from-white to-gray-100 border-t border-gray-200 text-gray-700 justify-center items-center">
+      <div className="max-w-7xl mx-auto px-6 py-16 ">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand */}
+          <div>
+            <div>
+              <h1 className="text-3xl font-bold text-black">wepretiffy</h1>
+              <p className="text-sm text-gray-600 mt-1">
                 Be the best version of you
-              </span>
+              </p>
             </div>
-
-            <div className="mt-4 flex space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full h-10 w-10"
-              >
+            <div className="mt-5 flex gap-3">
+              <Button variant="ghost" size="icon" className="rounded-full">
                 <Instagram className="h-5 w-5" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full h-10 w-10"
-              >
+              <Button variant="ghost" size="icon" className="rounded-full">
                 <Facebook className="h-5 w-5" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full h-10 w-10"
-              >
+              <Button variant="ghost" size="icon" className="rounded-full">
                 <Twitter className="h-5 w-5" />
               </Button>
             </div>
           </div>
 
           {/* Services */}
-          <div>
-            <h4 className="text-lg font-semibold text-foreground mb-4">
-              Our Services
-            </h4>
-            <ul className="space-y-3">
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Facial Treatments
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Massage Therapy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Skincare Consultation
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Aromatherapy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Wellness Packages
-                </a>
-              </li>
-            </ul>
+          <div className="flex flex-row gap-[60px]">
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Our Services</h4>
+              <ul className="space-y-2 text-sm">
+                {[
+                  "Facial Treatments",
+                  "Massage Therapy",
+                  "Skincare Consultation",
+                  "Aromatherapy",
+                  "Wellness Packages",
+                ].map((service, i) => (
+                  <li key={i}>
+                    <a href="#" className="hover:text-black transition-colors">
+                      {service}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Products */}
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Product Lines</h4>
+              <ul className="space-y-2 text-sm">
+                {[
+                  "Luxury Serums",
+                  "Premium Creams",
+                  "Cleansing Solutions",
+                  "Face Masks",
+                  "Gift Sets",
+                ].map((product, i) => (
+                  <li key={i}>
+                    <a href="#" className="hover:text-black transition-colors">
+                      {product}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          {/* Products */}
+          {/* Contact */}
           <div>
-            <h4 className="text-lg font-semibold text-foreground mb-4">
-              Product Lines
-            </h4>
-            <ul className="space-y-3">
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Luxury Serums
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Premium Creams
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Cleansing Solutions
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Face Masks
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-foreground hover:text-black transition-colors"
-                >
-                  Gift Sets
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h4 className="text-lg font-semibold text-black mb-4">
-              Get In Touch
-            </h4>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-black mt-0.5 flex-shrink-0" />
-                <span className="text-black">
+            <h4 className="text-lg font-semibold mb-4">Get In Touch</h4>
+            <ul className="space-y-4 text-sm text-gray-700">
+              <li className="flex items-start gap-3">
+                <MapPin className="h-5 w-5 mt-0.5 text-black" />
+                <span>
                   123 Beauty Boulevard
                   <br />
                   Wellness District, CA 90210
                 </span>
-              </div>
-              <div className="flex items-center gap-3">
+              </li>
+              <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-black" />
-                <span className="text-black">(555) 123-4567</span>
-              </div>
-              <div className="flex items-center gap-3">
+                <span>(555) 123-4567</span>
+              </li>
+              <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-black" />
-                <span className="text-black">hello@wepretiffy.com</span>
-              </div>
-            </div>
+                <span>hello@wepretiffy.com</span>
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="py-8 border-t border-border">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-black">
-              © 2024 wepretiffy. All rights reserved.
-            </div>
-            <div className="flex flex-wrap gap-6 text-sm">
+        {/* Bottom */}
+        {/* Bottom */}
+        <div className="text-center mt-12 border-t pt-6 border-gray-200 text-sm flex flex-col items-center gap-4 text-gray-600">
+          <span>© 2024 wepretiffy. All rights reserved.</span>
+          <div className="flex gap-6 flex-wrap justify-center">
+            {[
+              "Privacy Policy",
+              "Terms of Service",
+              "Cancellation Policy",
+              "Contact Us",
+            ].map((link, i) => (
               <a
+                key={i}
                 href="#"
-                className="text-foreground hover:text-black transition-colors"
+                className="hover:text-black transition-colors"
               >
-                Privacy Policy
+                {link}
               </a>
-              <a
-                href="#"
-                className="text-foreground hover:text-black transition-colors"
-              >
-                Terms of Service
-              </a>
-              <a
-                href="#"
-                className="text-foreground hover:text-black transition-colors"
-              >
-                Cancellation Policy
-              </a>
-              <a
-                href="#"
-                className="text-foreground hover:text-black transition-colors"
-              >
-                Contact Us
-              </a>
-            </div>
+            ))}
           </div>
         </div>
       </div>

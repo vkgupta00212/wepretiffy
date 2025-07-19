@@ -1,27 +1,25 @@
 import React from "react";
+
 const ServicePromoCard = ({ title, subtitle, image }) => {
   return (
-    <div className="m-1">
+    <div className="m-2">
       <div
-        className="relative w-full h-[225px] rounded-[10px] overflow-hidden shadow-md bg-black"
+        className="relative w-full h-[225px] rounded-xl overflow-hidden shadow-lg"
         style={{
           backgroundImage: `url(${image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        {/* Overlay content */}
-        {/* <div className="absolute inset-0 bg-black/40 p-4 flex flex-col justify-between text-white">
-         <div className="absolute inset-0 bg-black/40 p-4 flex flex-col justify-between text-white">
-        <div>
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <p className="text-sm mt-1">{subtitle}</p>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4 flex flex-col justify-end text-white">
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold">{title}</h3>
+            {subtitle && <p className="text-sm">{subtitle}</p>}
+          </div>
+          <button className="mt-3 bg-white text-black text-sm px-4 py-2 rounded-md shadow-md w-max hover:bg-gray-200 transition">
+            Book Now
+          </button>
         </div>
-        <button className="bg-white text-black text-sm px-4 py-1 rounded shadow w-max hover:bg-gray-200">
-          Book now
-        </button>
-      </div>
-      </div> */}
       </div>
     </div>
   );

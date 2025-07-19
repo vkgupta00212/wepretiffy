@@ -9,7 +9,7 @@ import WomenSaloonIn from "../component/ui/womensaloonIn";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-white m-[20px]">
+    <div className="min-h-screen bg-white m-[1px]">
       {/* <Navigation /> */}
       <HeroSection />
       <PromoCard />
