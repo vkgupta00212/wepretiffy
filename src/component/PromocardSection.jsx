@@ -71,7 +71,7 @@ const PromocardSection = () => {
 
   const [sliderRef, instanceRef] = useKeenSlider({
     slides: {
-      perView: 4,
+      perView: 3,
       spacing: 16,
     },
     breakpoints: {

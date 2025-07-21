@@ -12,20 +12,22 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <BrowserRouter>
-    <div className="mb-[80px]">
-      <Navbar />
-    </div>
-    <Routes>
-      {/* ✅ Valid Routes */}
-      <Route path="/" element={<Index />} />
-      <Route path="/womensaloonIn" element={<WomenSaloonIn />} />
-      <Route path="/paymentpage" element={<PaymentPage />} />
-      <Route path="/cartcard" element={<CartCard />} />
+    {/* ⬇️ Apply font-sans to whole layout */}
+    <div className="min-h-screen font-sans">
+      <div className="mb-[80px]">
+        <Navbar />
+      </div>
 
-      {/* ❌ Catch-all 404 Route */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    <Footer />
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/womensaloonIn" element={<WomenSaloonIn />} />
+        <Route path="/paymentpage" element={<PaymentPage />} />
+        <Route path="/cartcard" element={<CartCard />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
+      <Footer />
+    </div>
   </BrowserRouter>
 );
 

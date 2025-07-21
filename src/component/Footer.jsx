@@ -10,18 +10,16 @@ import { Button } from "../component/ui/button";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-br from-white to-gray-100 border-t border-gray-200 text-gray-700 justify-center items-center">
-      <div className="max-w-7xl mx-auto px-6 py-16 ">
-        {/* Main Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Brand */}
+    <footer className="bg-gradient-to-br from-white to-gray-100 border-t border-gray-200 text-gray-700">
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-x-12 xl:gap-x-16">
+          {/* Brand & Social */}
           <div>
-            <div>
-              <h1 className="text-3xl font-bold text-black">wepretiffy</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                Be the best version of you
-              </p>
-            </div>
+            <h1 className="text-3xl font-bold text-black">wepretiffy</h1>
+            <p className="text-sm text-gray-600 mt-1">
+              Be the best version of you
+            </p>
             <div className="mt-5 flex gap-3">
               <Button variant="ghost" size="icon" className="rounded-full">
                 <Instagram className="h-5 w-5" />
@@ -35,8 +33,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Services */}
-          <div className="flex flex-row gap-[60px]">
+          {/* Services & Products */}
+          <div className="flex flex-row gap-12">
             <div>
               <h4 className="text-lg font-semibold mb-4">Our Services</h4>
               <ul className="space-y-2 text-sm">
@@ -55,8 +53,6 @@ const Footer = () => {
                 ))}
               </ul>
             </div>
-
-            {/* Products */}
             <div>
               <h4 className="text-lg font-semibold mb-4">Product Lines</h4>
               <ul className="space-y-2 text-sm">
@@ -77,7 +73,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Contact */}
+          {/* Contact Info */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Get In Touch</h4>
             <ul className="space-y-4 text-sm text-gray-700">
@@ -101,9 +97,8 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom */}
-        {/* Bottom */}
-        <div className="text-center mt-12 border-t pt-6 border-gray-200 text-sm flex flex-col items-center gap-4 text-gray-600">
+        {/* Footer Bottom */}
+        <div className="mt-12 border-t pt-6 border-gray-200 text-sm flex flex-col items-center gap-4 text-gray-600 text-center">
           <span>© 2024 wepretiffy. All rights reserved.</span>
           <div className="flex gap-6 flex-wrap justify-center">
             {[
