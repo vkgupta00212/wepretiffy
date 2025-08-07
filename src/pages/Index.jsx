@@ -13,9 +13,9 @@ const Index = () => {
       {/* <Navigation /> */}
       <HeroSection />
       <PromoCard />
-      <ServicesCarousel />
+      {/* <ServicesCarousel /> */}
       <ServicesCarousel2 />
-      <ServicesCarousel3 />
+      {/* <ServicesCarousel3 /> */}
       <ServicesCarousel4 />
       {/* <TestimonialsSection />
       <BookingForm /> */}

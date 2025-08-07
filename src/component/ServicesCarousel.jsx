@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "../component/ui/card";
-import HomepageImageShowAPI from "../backend/homepageimage/homepageImageShow";
+import HomepageImageShowAPI from "../backend/homepageimage/getcategory";
 
 const ServicesCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);

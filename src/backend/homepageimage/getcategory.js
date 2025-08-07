@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const HomepageImageShowAPI = async () => {
+const GetSubCategory = async () => {
   try {
     const response = await axios.post(
       "https://weprettify.com/APIs/APIs.asmx/ServiceCategory",
@@ -21,4 +21,4 @@ const HomepageImageShowAPI = async () => {
   }
 };
 
-export default HomepageImageShowAPI;
+export default GetSubCategory;

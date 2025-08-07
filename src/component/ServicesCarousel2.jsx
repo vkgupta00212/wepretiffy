@@ -113,7 +113,7 @@ const ServicesCarousel = () => {
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <div className="text-[30px] font-medium text-black mb-10">
-          <h2>Most Booked Services</h2>
+          <h2>Women Services</h2>
         </div>
 
         {/* Slider Container */}

@@ -13,10 +13,10 @@ const Footer = () => {
     <footer className="bg-gradient-to-br from-white to-gray-100 border-t border-gray-200 text-gray-700">
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-x-12 xl:gap-x-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-x-[10px] xl:gap-x-16">
           {/* Brand & Social */}
           <div>
-            <h1 className="text-3xl font-bold text-black">wepretiffy</h1>
+            <h1 className="text-[35px] font-bold text-black">wepretiffy</h1>
             <p className="text-sm text-gray-600 mt-1">
               Be the best version of you
             </p>

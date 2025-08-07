@@ -1,44 +1,74 @@
 import React from "react";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { Minus, Plus } from "lucide-react";
 
-const PackageCard = () => {
+const PaymentCard2 = ({
+  cartItems,
+  updateQuantity,
+  removeFromCart,
+  calculateTotal,
+}) => {
+  const totalAmount = calculateTotal();
+
   return (
-    <div className="w-full max-w-[400px] p-4 bg-white border border-gray-300 rounded-md shadow-sm mb-6">
-      {/* Title and Price Row */}
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Complete waxing (tin)</h3>
-        </div>
+    <div className="max-w-3xl w-full mx-auto font-sans">
+      <div className="bg-white p-4 sm:p-6 rounded-[8px] border border-gray-300">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-6 text-gray-800">
+          Your Cart
+        </h2>
 
-        {/* Quantity and Price */}
-        <div className="flex flex-col items-end">
-          {/* Quantity Control */}
-          <div className="flex items-center border border-purple-300 rounded-lg px-2 py-1 text-purple-600 font-medium text-sm mb-1">
-            <FaMinus className="cursor-pointer" />
-            <span className="mx-3">1</span>
-            <FaPlus className="cursor-pointer" />
-          </div>
+        {cartItems.length > 0 ? (
+          cartItems.map((item) => (
+            <div
+              key={item.id}
+              className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4 border-b pb-4"
+            >
+              {/* Left side: Info */}
+              <div className="flex-1">
+                <p className="text-sm sm:text-base font-medium text-gray-800">
+                  {item.title}
+                </p>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                  {item.description}
+                </p>
+                <button
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-purple-600 hover:text-purple-800 text-sm mt-2"
+                >
+                  Remove
+                </button>
+              </div>
 
-          {/* Price */}
-          <div className="text-right">
-            <p className="text-black font-semibold text-sm">₹1,509</p>
-            <p className="line-through text-gray-400 text-xs">₹1,580</p>
-          </div>
-        </div>
+              {/* Right side: Quantity and price */}
+              <div className="flex flex-col items-start sm:items-end">
+                <div className="flex items-center border border-purple-400 text-purple-600 rounded-lg px-3 py-1 gap-3 text-sm font-medium">
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    className="hover:text-purple-800"
+                  >
+                    <Minus size={16} />
+                  </button>
+                  <span className="w-5 text-center">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    className="hover:text-purple-800"
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
+                <p className="text-md sm:text-lg font-semibold mt-2 text-gray-800">
+                  ₹{item.price * item.quantity}
+                </p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500">Your cart is empty.</p>
+        )}
       </div>
 
-      {/* Package Items */}
-      <ul className="mt-2 ml-4 text-sm text-gray-700 list-disc space-y-1">
-        <li>RICA gold x1</li>
-        <li>RICA gold x1</li>
-      </ul>
-
-      {/* Edit Package */}
-      <p className="mt-3 text-sm font-medium text-blue-600 underline cursor-pointer">
-        Edit package
-      </p>
+      {/* You can optionally render CartSummary here */}
     </div>
   );
 };
 
-export default PackageCard;
+export default PaymentCard2;

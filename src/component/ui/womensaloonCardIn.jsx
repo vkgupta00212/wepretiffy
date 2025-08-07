@@ -1,7 +1,9 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { X, ChevronRight } from "lucide-react";
 import img1 from "../../assets/facemask.png";
+import { i } from "framer-motion/client";
 
 // ✅ Services data with priceLevel, tag, and brands
 const services = [
@@ -11,7 +13,8 @@ const services = [
     priceLevel: "₹₹₹",
     tag: "LUXURY",
     brands: ["AINHOA", "CASMARA", "CIRÉPIL"],
-    path: "/WomenSaloonIn",
+    mobilePath: "/womensaloonInMobile",
+    desktopPath: "/WomenSaloonIn",
   },
   {
     icon: img1,
@@ -19,7 +22,8 @@ const services = [
     priceLevel: "₹₹",
     tag: "PREMIUM",
     brands: ["Forest Essentials", "VLCC"],
-    path: "/WomenSaloonIn",
+    mobilePath: "/womensaloonInMobile",
+    desktopPath: "/WomenSaloonIn",
   },
   {
     icon: img1,
@@ -27,12 +31,27 @@ const services = [
     priceLevel: "₹₹₹",
     tag: "LUXURY",
     brands: ["MAC", "Sephora", "Kiko"],
-    path: "/WomenSaloonIn",
+    mobilePath: "/womensaloonInMobile",
+    desktopPath: "/WomenSaloonIn",
   },
 ];
 
 // ✅ Card Component
 const WomensCardIn = ({ icon, label, priceLevel, tag, brands, onClick }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    checkScreen();
+    window.addEventListener("resize", checkScreen);
+    return () => {
+      window.removeEventListener("resize", checkScreen);
+    };
+  }, []);
+
   return (
     <div
       onClick={onClick}
@@ -72,9 +91,21 @@ const WomensCardIn = ({ icon, label, priceLevel, tag, brands, onClick }) => {
 // ✅ Modal Card Wrapper
 const WomensSalonCard = ({ onClose }) => {
   const navigate = useNavigate();
+  // const [isMobile, setIsMobile] = useState(false);
+
+  // useEffect(() => {
+  //   const checkScreen = () => {
+  //     setIsMobile(window.innerWidth < 640 ? true : false);
+  //   };
+  //   checkScreen();
+  //   window.addEventListener("resize", checkScreen);
+  //   return () => {
+  //     window.removeEventListener("resize", checkScreen);
+  //   };
+  // }, []);
 
   return (
-    <div className="bg-white rounded-2xl p-6 w-full max-w-xl relative shadow-lg z-50">
+    <div className="bg-white rounded-[5px] p-[20px] w-full max-w-xl relative z-50">
       {/* Close Button */}
       <button
         className="absolute top-3 right-3 text-gray-500 hover:text-black"
@@ -99,7 +130,7 @@ const WomensSalonCard = ({ onClose }) => {
             tag={service.tag}
             brands={service.brands}
             onClick={() => {
-              navigate(service.path);
+              navigate(service.desktopPath);
               if (onClose) onClose();
             }}
           />
