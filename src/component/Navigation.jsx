@@ -1,24 +1,19 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import GetUser from "../backend/authentication/getuser";
 
 const Navigation = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [open, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
-  const phone = localStorage.getItem("userPhone");
   const [user, setUser] = useState([]);
+  const phone = localStorage.getItem("userPhone");
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-
-  const handleDash = () => {
-    navigate("/");
-  };
 
   useEffect(() => {
     const fetchuser = async () => {
@@ -28,11 +23,10 @@ const Navigation = () => {
         setUser(fetchedUser || []);
       } catch (error) {
         console.error("Error fetching user:", error);
-        setMessage("Failed to load user. Please try again later.");
       }
     };
-    fetchuser();
-  }, []);
+    if (phone) fetchuser();
+  }, [phone]);
 
   // Scroll listener
   useEffect(() => {
@@ -77,7 +71,7 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-[80px]">
           {/* Logo */}
           <div
-            onClick={handleDash}
+            onClick={() => navigate("/")}
             className="flex flex-col cursor-pointer group"
           >
             <span className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105">
@@ -91,21 +85,32 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-10 text-lg font-medium">
             {[
-              { href: "/", label: "Home" },
-              { href: "/course", label: "Course" },
-              { href: "/skinanalyzer", label: "Skin Analyzer" },
-              { href: "#products", label: "Products" },
-              { href: "#services", label: "Services" },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="relative text-gray-700 hover:text-indigo-600 transition-colors duration-300 group"
-              >
-                {item.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            ))}
+              { to: "/", label: "Home" },
+              { to: "/course", label: "Course" },
+              { to: "/skinanalyzer", label: "Skin Analyzer" },
+              { to: "#products", label: "Products" },
+              { to: "#services", label: "Services" },
+            ].map((item) =>
+              item.to.startsWith("#") ? (
+                <a
+                  key={item.label}
+                  href={item.to}
+                  className="relative text-gray-700 hover:text-indigo-600 transition-colors duration-300 group"
+                >
+                  {item.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+              ) : (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className="relative text-gray-700 hover:text-indigo-600 transition-colors duration-300 group"
+                >
+                  {item.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
+                </Link>
+              )
+            )}
 
             {isLoggedIn ? (
               /* Profile Dropdown */
@@ -137,25 +142,18 @@ const Navigation = () => {
                 {/* Dropdown Menu */}
                 {open && (
                   <div className="absolute right-0 mt-3 bg-white shadow-xl rounded-xl w-56 z-50 text-sm border border-gray-100 transform transition-all duration-300 scale-95 origin-top-right animate-in">
-                    {[
-                      { href: "/userprofile", label: "My Profile" },
-                      {
-                        label: "Logout",
-                        className: "text-red-500",
-                        onClick: handleLogout,
-                      },
-                    ].map((item) => (
-                      <a
-                        key={item.label}
-                        href={item.href || "#"}
-                        onClick={item.onClick || null}
-                        className={`block px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 ${
-                          item.className || "text-gray-700"
-                        } first:rounded-t-xl last:rounded-b-xl`}
-                      >
-                        {item.label}
-                      </a>
-                    ))}
+                    <Link
+                      to="/userprofile"
+                      className="block px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-gray-700 first:rounded-t-xl"
+                    >
+                      My Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-red-500 last:rounded-b-xl"
+                    >
+                      Logout
+                    </button>
                   </div>
                 )}
               </div>

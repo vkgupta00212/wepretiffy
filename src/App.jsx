@@ -1,7 +1,7 @@
 // App.jsx
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { QueryClient } from "@tanstack/react-query";
+import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -50,23 +50,25 @@ const Layout = ({ children }) => {
 
 const App = () => {
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/womensaloonIn" element={<WomenSaloonIn />} />
-            <Route path="/paymentpage" element={<PaymentPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/otpverification" element={<OtpVerification />} />
-            <Route path="/course" element={<Course />} />
-            <Route path="/skinanalyzer" element={<SkinAnalyzer />} />
-            <Route path="/userprofile" element={<UserProfile />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
-    </CartProvider>
+    <QueryClientProvider client={queryClient}>
+      <CartProvider>
+        <HashRouter>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/womensaloonIn" element={<WomenSaloonIn />} />
+              <Route path="/paymentpage" element={<PaymentPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/otpverification" element={<OtpVerification />} />
+              <Route path="/course" element={<Course />} />
+              <Route path="/skinanalyzer" element={<SkinAnalyzer />} />
+              <Route path="/userprofile" element={<UserProfile />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </HashRouter>
+      </CartProvider>
+    </QueryClientProvider>
   );
 };
 
