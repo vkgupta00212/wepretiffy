@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import GetUser from "../backend/authentication/getuser";
+import GetWallet from "../backend/getwallet/getwallet";
+import logo from "../assets/logo.jpg";
 
 const Navigation = () => {
   const [showNavbar, setShowNavbar] = useState(true);
@@ -12,6 +14,7 @@ const Navigation = () => {
   );
   const [user, setUser] = useState([]);
   const phone = localStorage.getItem("userPhone");
+  const [wallet, setWallet] = useState([]);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -28,7 +31,19 @@ const Navigation = () => {
     if (phone) fetchuser();
   }, [phone]);
 
-  // Scroll listener
+  useEffect(() => {
+    const fetchWallet = async () => {
+      try {
+        const data = await GetWallet(phone);
+        console.log("Fetched from the Navigation ", { data });
+        setWallet(data || []);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    if (phone) fetchWallet();
+  }, [phone]);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -44,7 +59,6 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  // Click outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -72,24 +86,33 @@ const Navigation = () => {
           {/* Logo */}
           <div
             onClick={() => navigate("/")}
-            className="flex flex-col cursor-pointer group"
+            className="flex items-center cursor-pointer group space-x-3"
           >
-            <span className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105">
-              wepretiffy
-            </span>
-            <span className="text-sm md:text-base font-medium text-gray-600 mt-1 group-hover:text-indigo-600 transition-colors duration-300">
-              Be the best version of you
-            </span>
+            {/* Circular Logo Image */}
+            <img
+              src={logo}
+              alt="WePrettify Logo"
+              className="w-14 h-14 rounded-full object-cover border-2 border-indigo-500 group-hover:scale-105 transition-transform duration-300"
+            />
+
+            {/* Brand Name & Tagline */}
+            <div className="flex flex-col">
+              <span className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105">
+                weprettify
+              </span>
+              <span className="text-sm md:text-base font-medium text-gray-600 mt-1 group-hover:text-indigo-600 transition-colors duration-300">
+                Be the best version of you
+              </span>
+            </div>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-10 text-lg font-medium">
             {[
               { to: "/", label: "Home" },
-              { to: "/course", label: "Course" },
+              { to: "/course", label: "Courses" },
               { to: "/skinanalyzer", label: "Skin Analyzer" },
               { to: "#products", label: "Products" },
-              { to: "#services", label: "Services" },
             ].map((item) =>
               item.to.startsWith("#") ? (
                 <a
@@ -148,6 +171,16 @@ const Navigation = () => {
                     >
                       My Profile
                     </Link>
+                    <Link
+                      to="/transactions"
+                      className="flex justify-between items-center px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-gray-700 first:rounded-t-xl"
+                    >
+                      <span>Wallet</span>
+                      <span className="font-semibold text-indigo-600">
+                        ₹{wallet[0]?.WalletBalance || 0}
+                      </span>
+                    </Link>
+
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-red-500 last:rounded-b-xl"

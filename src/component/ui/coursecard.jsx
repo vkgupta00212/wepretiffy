@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent } from "../ui/card";
+import { useNavigate } from "react-router-dom"; // ✅ import navigate
 import GetServicePack from "../../backend/servicepack/getservicepack";
 
+// ✅ Package Card Component
 const PackageCardItem = ({
   image,
   servicename,
   duration,
   fees,
   discountfee,
-  onAdd,
+  pkg, // pass the full object
 }) => {
+  const navigate = useNavigate();
+
+  const handleJoinClick = () => {
+    // ✅ Navigate to joincourses page and pass course details
+    navigate("/joincourses", { state: { course: pkg } });
+  };
+
   return (
     <div className="group w-full max-w-xs rounded-xl border border-gray-200 bg-white shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1">
       <div className="relative overflow-hidden">
@@ -40,7 +48,7 @@ const PackageCardItem = ({
         </div>
 
         <button
-          onClick={onAdd}
+          onClick={handleJoinClick} // ✅ navigate on click
           className="w-full px-3 sm:px-4 py-2 bg-indigo-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm hover:shadow-md"
         >
           Join
@@ -50,6 +58,7 @@ const PackageCardItem = ({
   );
 };
 
+// ✅ Course Card List
 const CourseCard = () => {
   const [servicePackages, setServicePackages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -94,7 +103,7 @@ const CourseCard = () => {
               <PackageCardItem
                 key={pkg.id}
                 {...pkg}
-                onAdd={() => addToCart(pkg)}
+                pkg={pkg} // ✅ pass full course object
               />
             ))}
           </div>

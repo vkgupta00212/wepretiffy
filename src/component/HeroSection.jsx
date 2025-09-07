@@ -56,7 +56,7 @@ const HeroSection = () => {
         </section> */}
 
         {/* Stats */}
-        <section className="w-full flex justify-center mt-6">
+        {/* <section className="w-full flex justify-center mt-6">
           <div className="flex flex-col sm:flex-row gap-10 lg:gap-32 text-center">
             <div className="flex flex-col items-center">
               <Star className="h-7 w-7 text-yellow-500 mb-2" />
@@ -73,7 +73,7 @@ const HeroSection = () => {
               </p>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
 
       {/* Modal */}
