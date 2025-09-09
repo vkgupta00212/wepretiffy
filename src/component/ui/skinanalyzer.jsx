@@ -238,7 +238,7 @@ const SkinAnalyzer = () => {
     );
   }
 
-  return null; // Fallback in case no step matches
+  return null;
 };
 
 export default SkinAnalyzer;

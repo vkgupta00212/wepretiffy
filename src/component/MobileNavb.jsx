@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Home from "../pages/Index";
 import SkinAnalyzer from "./ui/skinanalyzer";
 import Services from "../pages/Index";
+import ProductScreen from "./ui/products";
 import UserProfile from "./ui/userprofile";
 
 const navItems = [
@@ -26,7 +27,7 @@ const navItems = [
     notification: false,
   },
   {
-    label: "Services",
+    label: "Products",
     icon: (
       <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
@@ -35,7 +36,7 @@ const navItems = [
         </svg>
       </div>
     ),
-    component: <Services />,
+    component: <ProductScreen />,
     notification: true,
   },
   {

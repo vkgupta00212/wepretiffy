@@ -12,7 +12,9 @@ const PaymentCard = ({
   selectedSlot,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
-  const isLoggedIn = false;
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
 
   useEffect(() => {
     const checkScreen = () => setIsMobile(window.innerWidth < 640);
@@ -20,6 +22,12 @@ const PaymentCard = ({
     window.addEventListener("resize", checkScreen);
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
 
   const isSlotButtonDisabled = !selectedAddress;
   const isPaymentButtonDisabled = !selectedAddress || !selectedSlot;

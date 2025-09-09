@@ -45,11 +45,11 @@ const UserProfile = () => {
     { id: 2, title: "Saved Addresses", Component: <AddressDetails /> },
     { id: 3, title: "Refer & Earn", Component: <ReferAndEarn /> },
     { id: 4, title: "Enter Referral Code", Component: <EnterReferCode /> },
-    { id: 5, title: "Referred Friends", Component: <ReferAndEarn /> },
-    { id: 6, title: "My Orders", Component: <AddressDetails /> },
-    { id: 7, title: "About Us", Component: <AboutUs /> },
-    { id: 8, title: "Terms & Conditions", Component: <TermsPage /> },
-    { id: 9, title: "Privacy Policy", Component: <PrivacyAndPolicy /> },
+    // { id: 5, title: "Referred Friends", Component: <ReferAndEarn /> },
+    { id: 5, title: "My Orders", Component: <AddressDetails /> },
+    { id: 6, title: "About Us", Component: <AboutUs /> },
+    { id: 7, title: "Terms & Conditions", Component: <TermsPage /> },
+    { id: 8, title: "Privacy Policy", Component: <PrivacyAndPolicy /> },
   ];
 
   const handleImageChange = (e) => {
@@ -131,7 +131,7 @@ const UserProfile = () => {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+          <h1 className="text-[18px] sm:text-3xl font-normal text-gray-900 tracking-tight">
             My Profile
           </h1>
           <div className="w-20 h-1 bg-blue-500 rounded-full mt-2" />

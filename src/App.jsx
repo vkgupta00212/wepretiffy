@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import WomenSaloonIn from "./component/ui/womensaloonIn";
@@ -19,6 +18,7 @@ import JoinCourses from "./component/ui/join";
 import TermsPage from "./component/ui/terms&condition";
 import PrivacyAndPolicy from "./component/ui/privacy&policy";
 import TransactionHistory from "./component/ui/transactions";
+import ProductScreen from "./component/ui/products";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +79,7 @@ const App = () => {
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyAndPolicy />} />
               <Route path="/transactions" element={<TransactionHistory />} />
+              <Route path="/productscreen" element={<ProductScreen />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

@@ -112,7 +112,7 @@ const Navigation = () => {
               { to: "/", label: "Home" },
               { to: "/course", label: "Courses" },
               { to: "/skinanalyzer", label: "Skin Analyzer" },
-              { to: "#products", label: "Products" },
+              { to: "/productscreen", label: "Products" },
             ].map((item) =>
               item.to.startsWith("#") ? (
                 <a

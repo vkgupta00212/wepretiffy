@@ -1,23 +1,23 @@
 import axios from "axios";
 
-class GetMenServicesModel {
-  constructor(id, Image, Text, Serviceid, Description, Type) {
+class GetMenServiceModel {
+  constructor(id, image, text, serviceId, description, type) {
     this.id = id;
-    this.Image = Image;
-    this.Text = Text;
-    this.Serviceid = Serviceid;
-    this.Description = Description;
-    this.Type = Type;
+    this.image = image;
+    this.text = text;
+    this.serviceId = serviceId;
+    this.description = description;
+    this.type = type;
   }
 
   static fromJson(json) {
-    return new GetMenServicesModel(
+    return new GetMenServiceModel(
       json.id || 0,
-      json.Image || "",
-      json.Text || "",
-      json.Serviceid || "",
-      json.Description || "",
-      json.Type || ""
+      json.Image || json.image || "",
+      json.Text || json.text || "",
+      json.Serviceid || json.serviceId || "",
+      json.Description || json.description || "",
+      json.Type || json.type || ""
     );
   }
 }
@@ -37,29 +37,24 @@ const GetMenServices = async () => {
       }
     );
 
-    let data = response.data;
-    if (!data) {
-      console.error("Response data is null or undefined");
+    let rawData = response.data;
+
+    // If response is a string, try parsing JSON
+    if (typeof rawData === "string") {
+      try {
+        rawData = JSON.parse(rawData);
+      } catch {
+        console.error("Invalid JSON format in GetMenServices response");
+        return [];
+      }
+    }
+
+    if (!Array.isArray(rawData)) {
+      console.error("Unexpected response format:", rawData);
       return [];
     }
 
-    // Log a warning if the array is empty
-    if (data.length === 0) {
-      console.warn("GetWomenServices returned an empty array");
-    }
-
-    if (data.length === 0) {
-      console.warn("GetMenServices returned an empty array");
-    }
-
-    return data
-      .map((item) => {
-        if (typeof item === "object" && item !== null) {
-          return GetMenServicesModel.fromJson(item);
-        }
-        return null;
-      })
-      .filter(Boolean);
+    return rawData.map((item) => GetMenServiceModel.fromJson(item));
   } catch (error) {
     console.error("Error fetching GetMenServices:", {
       message: error.message,

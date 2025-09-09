@@ -1,17 +1,17 @@
 import axios from "axios";
 
-class GetWomenServicesModel {
-  constructor(id, Image, Text, Serviceid, Description, Type) {
+class GetWomenServiceModel {
+  constructor(id, image, text, serviceId, description, type) {
     this.id = id;
-    this.Image = Image;
-    this.Text = Text;
-    this.Serviceid = Serviceid;
-    this.Description = Description;
-    this.Type = Type;
+    this.image = image;
+    this.text = text;
+    this.serviceId = serviceId;
+    this.description = description;
+    this.type = type;
   }
 
   static fromJson(json) {
-    return new GetWomenServicesModel(
+    return new GetWomenServiceModel(
       json.id || 0,
       json.Image || "",
       json.Text || "",
@@ -37,34 +37,28 @@ const GetWomenServices = async () => {
       }
     );
 
-    // Check if response.data is valid
     const data = response.data;
-    if (!data) {
-      console.error("Response data is null or undefined");
+
+    if (!data || !Array.isArray(data)) {
+      console.error("Unexpected response format:", data);
       return [];
     }
 
-    // Log a warning if the array is empty
-    if (data.length === 0) {
-      console.warn("GetWomenServices returned an empty array");
-    }
-
-    // Map the response to GetWomenServicesModel instances, ensuring valid items
     return data
       .map((item) => {
-        if (typeof item === "object" && item !== null) {
-          return GetWomenServicesModel.fromJson(item);
+        if (item && typeof item === "object") {
+          return GetWomenServiceModel.fromJson(item);
         }
         return null;
       })
-      .filter(Boolean); // Remove any null/undefined mappings
+      .filter(Boolean); // remove nulls
   } catch (error) {
     console.error("Error fetching GetWomenServices:", {
       message: error.message,
       status: error.response?.status,
       data: error.response?.data,
     });
-    return []; // Return empty array on error for consistency
+    return [];
   }
 };
 

@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import GetServicePack from "../../backend/servicepack/getservicepack";
+import GetSkinAnalyzer from "../../backend/getskinanalyzer/skinanalyzer";
 
-const PackageCardItem = ({
-  image,
-  servicename,
-  duration,
-  fees,
-  discountfee,
-  onAdd,
-}) => {
+// Package card component
+const PackageCardItem = ({ item, onAdd }) => {
+  const { Image, ServiceName, duration, Fees, DiscountFees } = item;
+
   return (
     <div className="relative w-full max-w-[400px] sm:max-w-[350px] md:max-w-[500px] lg:max-w-[550px] rounded-2xl border border-gray-200 bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
       <div className="relative overflow-hidden rounded-t-2xl">
         <img
-          src={image || "https://via.placeholder.com/550x200"}
-          alt={servicename}
+          src={Image || "https://via.placeholder.com/550x200"}
+          alt={ServiceName}
           className="w-full h-32 sm:h-40 md:h-48 lg:h-56 object-cover transition-transform duration-300 hover:scale-105"
           loading="lazy"
           onError={(e) => {
@@ -28,26 +24,24 @@ const PackageCardItem = ({
 
       <div className="p-4 sm:p-5 md:p-6 space-y-3">
         <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 tracking-tight line-clamp-2">
-          {servicename}
+          {ServiceName}
         </h2>
 
         <div className="flex items-center gap-2">
           <span className="text-indigo-700 text-base sm:text-lg md:text-xl font-bold">
-            ₹{Number(discountfee || fees).toFixed(2)}
+            ₹{Number(DiscountFees || Fees).toFixed(2)}
           </span>
-          {discountfee && (
+          {DiscountFees && (
             <span className="line-through text-gray-400 text-xs sm:text-sm md:text-base">
-              ₹{Number(fees).toFixed(2)}
+              ₹{Number(Fees).toFixed(2)}
             </span>
           )}
         </div>
 
         <button
-          onClick={() =>
-            onAdd({ image, servicename, duration, fees, discountfee })
-          }
+          onClick={() => onAdd(item)}
           className="w-full py-2 sm:py-2.5 bg-indigo-600 text-white text-xs sm:text-sm md:text-base font-semibold rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          aria-label={`Add ${servicename} to cart`}
+          aria-label={`Add ${ServiceName} to cart`}
         >
           Add to Cart
         </button>
@@ -56,23 +50,18 @@ const PackageCardItem = ({
   );
 };
 
-const SuggestedAnalyzecard = ({ addToCart, serviceId }) => {
+// Suggested Analyzer Card Component
+const SuggestedAnalyzecard = ({ addToCart }) => {
   const [servicePackages, setServicePackages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPackages = async () => {
-      if (!serviceId) {
-        setError("No service ID provided.");
-        setLoading(false);
-        return;
-      }
-
       setLoading(true);
       setError(null);
       try {
-        const data = await GetServicePack(serviceId);
+        const data = await GetSkinAnalyzer();
         if (!Array.isArray(data)) {
           throw new Error("Invalid data format received.");
         }
@@ -86,7 +75,7 @@ const SuggestedAnalyzecard = ({ addToCart, serviceId }) => {
     };
 
     fetchPackages();
-  }, [serviceId]);
+  }, []);
 
   return (
     <div className="w-full bg-gradient-to-b py-3 sm:py-10 md:py-12">
@@ -109,14 +98,7 @@ const SuggestedAnalyzecard = ({ addToCart, serviceId }) => {
         ) : (
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8">
             {servicePackages.map((pkg) => (
-              <PackageCardItem
-                key={pkg.id}
-                {...pkg}
-                onAdd={() => {
-                  console.log("Adding to cart:", pkg); // Debugging
-                  addToCart(pkg);
-                }}
-              />
+              <PackageCardItem key={pkg.id} item={pkg} onAdd={addToCart} />
             ))}
           </div>
         )}

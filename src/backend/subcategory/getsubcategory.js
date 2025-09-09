@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// ✅ Model
-class SubCategory {
+class GetSubCategoryModel {
   constructor(id, image, text, serviceId, description, type) {
     this.id = id;
     this.image = image;
@@ -12,18 +11,17 @@ class SubCategory {
   }
 
   static fromJson(json) {
-    return new SubCategory(
+    return new GetSubCategoryModel(
       json.id || 0,
-      json.Image || "",
-      json.Text || "",
-      json.Serviceid || "",
-      json.Description || "",
-      json.Type || ""
+      json.Image || json.image || "",
+      json.Text || json.text || "",
+      json.Serviceid || json.serviceId || "",
+      json.Description || json.description || "",
+      json.Type || json.type || ""
     );
   }
 }
 
-// ✅ API Fetch Function
 const GetSubCategory = async (Id, Type) => {
   const formData = new URLSearchParams();
   formData.append("token", "SWNCMPMSREMXAMCKALVAALI");
@@ -41,24 +39,32 @@ const GetSubCategory = async (Id, Type) => {
       }
     );
 
-    // ✅ API returns XML sometimes? If yes, convert it to JSON first.
-    // Assuming response.data is already JSON array
     let rawData = response.data;
 
-    // If it's a string JSON, parse it
+    // If response is a string, try parsing JSON
     if (typeof rawData === "string") {
-      rawData = JSON.parse(rawData);
+      try {
+        rawData = JSON.parse(rawData);
+      } catch {
+        console.error("Invalid JSON format in OffersService response");
+        return [];
+      }
     }
 
-    // ✅ Convert raw API response into list of SubCategory objects
-    const subCategoryList = rawData.map((item) => SubCategory.fromJson(item));
+    if (!Array.isArray(rawData)) {
+      console.error("Unexpected response format:", rawData);
+      return [];
+    }
 
-    return subCategoryList;
+    return rawData.map((item) => GetSubCategoryModel.fromJson(item));
   } catch (error) {
-    console.error("API Error:", error);
+    console.error("Error fetching GetSubCategory:", {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
     return [];
   }
 };
 
-export { GetSubCategory, SubCategory };
-    
+export default GetSubCategory;
