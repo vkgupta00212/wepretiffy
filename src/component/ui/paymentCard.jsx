@@ -23,12 +23,6 @@ const PaymentCard = ({
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-    navigate("/login");
-  };
-
   const isSlotButtonDisabled = !selectedAddress;
   const isPaymentButtonDisabled = !selectedAddress || !selectedSlot;
 
@@ -57,7 +51,9 @@ const PaymentCard = ({
             <p className="text-base font-semibold text-gray-900">
               Send booking details to
             </p>
-            <p className="text-sm text-gray-600">+91 7700818001</p>
+            <p className="text-sm text-gray-600">
+              +91 {selectedAddress?.Phone || localStorage.getItem("userPhone")}
+            </p>
           </div>
         </div>
 
@@ -75,13 +71,7 @@ const PaymentCard = ({
                 <strong>Name:</strong> {selectedAddress.Name}
               </p>
               <p className="text-sm text-gray-600">
-                <strong>Address:</strong> {selectedAddress.Address}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>City:</strong> {selectedAddress.City}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Pincode:</strong> {selectedAddress.PinCode}
+                <strong>Address:</strong> {selectedAddress.FullAddress}
               </p>
             </div>
           ) : (
@@ -163,12 +153,7 @@ const PaymentCard = ({
             onSelectAddress();
           }
         }}
-        disabled={isLoggedIn && !selectedAddress}
-        className={`w-full py-3 rounded-lg font-medium shadow transition-all focus:ring-2 focus:ring-indigo-300 ${
-          isLoggedIn && !selectedAddress
-            ? "bg-gray-300 cursor-not-allowed text-gray-500"
-            : "bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:from-indigo-700 hover:to-purple-700"
-        }`}
+        className="w-full py-3 rounded-lg font-medium shadow bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:ring-2 focus:ring-indigo-300"
       >
         {isLoggedIn ? "Add Address & Slot" : "Login to Continue"}
       </button>

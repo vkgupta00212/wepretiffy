@@ -1,6 +1,6 @@
 import axios from "axios";
 
-class GetProductModel {
+class GetSuggestProductModel {
   constructor(ProID, ProductName, ProductDes, Price) {
     this.ProID = ProID;
     this.ProductName = ProductName;
@@ -9,7 +9,7 @@ class GetProductModel {
   }
 
   static fromJson(json) {
-    return new GetProductModel(
+    return new GetSuggestProductModel(
       json.ProID || 0,
       json.ProductName || "",
       json.ProductDes || "",
@@ -18,13 +18,13 @@ class GetProductModel {
   }
 }
 
-const GetProduct = async () => {
+const GetSuggestProduct = async () => {
   const formData = new URLSearchParams();
   formData.append("token", "SWNCMPMSREMXAMCKALVAALI");
 
   try {
     const response = await axios.post(
-      "https://weprettify.com/APIs/APIs.asmx/ShowProducts",
+      "https://weprettify.com/APIs/APIs.asmx/ShowSuggestedProducts",
       formData,
       {
         headers: {
@@ -49,7 +49,7 @@ const GetProduct = async () => {
       return [];
     }
 
-    return rawData.map((item) => GetProductModel.fromJson(item));
+    return rawData.map((item) => GetSuggestProductModel.fromJson(item));
   } catch (error) {
     console.error("Error fetching GetProduct:", {
       message: error.message,
@@ -60,4 +60,4 @@ const GetProduct = async () => {
   }
 };
 
-export default GetProduct;
+export default GetSuggestProduct;

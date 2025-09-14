@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import GetServicePack from "../../backend/servicepack/getservicepack";
 
 const PackageCardItem = ({
@@ -8,7 +8,26 @@ const PackageCardItem = ({
   fees,
   discountfee,
   onAdd,
+  refreshPackages, // ✅ refetch packages after add
 }) => {
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleAddClick = async () => {
+    setIsAdding(true);
+    try {
+      // Simulate network delay between 2-3 seconds
+      const delay = Math.floor(Math.random() * 1000) + 2000;
+      await new Promise((resolve) => setTimeout(resolve, delay));
+
+      await onAdd(); // Add to cart
+      refreshPackages?.(); // ✅ Refresh package list after adding
+    } catch (err) {
+      console.error("Add to cart failed:", err);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   return (
     <div className="relative w-full max-w-[400px] sm:max-w-[350px] md:max-w-[500px] lg:max-w-[550px] rounded-2xl border border-gray-200 bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
       <div className="relative overflow-hidden rounded-t-2xl">
@@ -40,11 +59,15 @@ const PackageCardItem = ({
         </div>
 
         <button
-          onClick={onAdd}
-          className="w-full py-2 sm:py-2.5 bg-indigo-600 text-white text-xs sm:text-sm md:text-base font-semibold rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={handleAddClick}
+          disabled={isAdding}
+          className="w-full py-2 sm:py-2.5 bg-indigo-600 text-white text-xs sm:text-sm md:text-base font-semibold rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 flex justify-center items-center gap-2"
           aria-label={`Add ${servicename} to cart`}
         >
-          Add to Cart
+          {isAdding && (
+            <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></span>
+          )}
+          {isAdding ? "Adding..." : "Add to Cart"}
         </button>
       </div>
     </div>
@@ -56,25 +79,24 @@ const PackageCard = ({ addToCart, selectedServiceTab }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchPackages = async () => {
-      if (!selectedServiceTab?.SubCatid) return;
-
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await GetServicePack(selectedServiceTab.SubCatid);
-        setServicePackages(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Error fetching packages:", error);
-        setError("Failed to load packages. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPackages();
+  const fetchPackages = useCallback(async () => {
+    if (!selectedServiceTab?.SubCatid) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await GetServicePack(selectedServiceTab.SubCatid);
+      setServicePackages(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error fetching packages:", err);
+      setError("Failed to load packages. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   }, [selectedServiceTab]);
+
+  useEffect(() => {
+    fetchPackages();
+  }, [fetchPackages]);
 
   return (
     <div className="w-full bg-gradient-to-b border border-b-1 border-gray-300 rounded-[8px] py-8 sm:py-10 md:py-12">
@@ -105,6 +127,7 @@ const PackageCard = ({ addToCart, selectedServiceTab }) => {
                 key={pkg.id}
                 {...pkg}
                 onAdd={() => addToCart(pkg)}
+                refreshPackages={fetchPackages} // ✅ pass callback
               />
             ))}
           </div>

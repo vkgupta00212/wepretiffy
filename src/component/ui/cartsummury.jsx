@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CartSummary = ({ total, cartItems }) => {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
-  // Calculate total discount
-  const totalDiscount = cartItems.reduce((acc, item) => {
-    const original = parseFloat(item.fees) || 0;
-    const discounted = parseFloat(item.discountfee) || original;
-    const qty = parseInt(item.quantity) || 1;
-    return acc + (original - discounted) * qty;
-  }, 0);
+  // ✅ Auto recalc discount whenever cart changes
+  const totalDiscount = useMemo(() => {
+    return cartItems.reduce((acc, item) => {
+      const original = Number(item.Price) || 0;
+      const discounted = Number(item.DiscountPrice) || original;
+      const qty = Number(item.Quantity) || 1;
+      return acc + (original - discounted) * qty;
+    }, 0);
+  }, [cartItems]);
 
-  // Navigate to payment page
   const handleCart = () => {
     console.log("Navigating to payment with:", {
       cartItems,
       total,
       totalDiscount,
-    }); // Debugging
+    });
     navigate("/paymentpage", {
       state: {
         cartItems,
@@ -41,6 +42,7 @@ const CartSummary = ({ total, cartItems }) => {
     return null;
   }
 
+  // ✅ Mobile summary (sticky bottom)
   const MobileSummary = () => (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-300 shadow-lg">
       <button
@@ -55,6 +57,7 @@ const CartSummary = ({ total, cartItems }) => {
     </div>
   );
 
+  // ✅ Desktop summary
   const DesktopSummary = () => (
     <div className="w-full p-4 sm:p-6 bg-white border-t border-gray-200">
       <div className="mb-4">

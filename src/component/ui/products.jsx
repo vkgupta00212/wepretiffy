@@ -3,6 +3,7 @@ import { Card, CardContent } from "./card";
 import { useNavigate } from "react-router-dom";
 import spaImage from "../../assets/facialimg.png";
 import GetProduct from "../../backend/getproduct/getproduct";
+import GetProductImage from "../../backend/getproduct/getproductimage";
 import { AlertCircle } from "lucide-react";
 
 const ProductScreen = () => {
@@ -13,11 +14,35 @@ const ProductScreen = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchServicesWithImages = async () => {
       try {
         setIsLoading(true);
-        const data = await GetProduct();
-        setServices(data || []);
+        const products = await GetProduct();
+
+        if (!products || products.length === 0) {
+          setServices([]);
+          return;
+        }
+
+        const productsWithImages = await Promise.all(
+          products.map(async (product) => {
+            try {
+              const images = await GetProductImage(product.ProID);
+              return {
+                ...product,
+                imageUrl: images.length > 0 ? images[0].productImage : "", // ✅ fixed
+              };
+            } catch (err) {
+              console.error(
+                `Error fetching image for product ${product.ProID}:`,
+                err
+              );
+              return { ...product, imageUrl: "" };
+            }
+          })
+        );
+
+        setServices(productsWithImages);
         setError(null);
       } catch (err) {
         setError(err.message || "Failed to load products");
@@ -25,14 +50,13 @@ const ProductScreen = () => {
         setIsLoading(false);
       }
     };
-    fetchServices();
+
+    fetchServicesWithImages();
   }, []);
 
   const handleServiceClick = (service) => {
-    navigate("/womensaloonIn", { state: { subService: service } });
+    navigate("/productmainpage", { state: { subService: service } });
   };
-
-  const imageBaseUrl = "https://weprettify.com/Images/";
 
   const SkeletonCard = () => (
     <Card className="flex flex-col h-[360px] rounded-lg shadow-lg border animate-pulse">
@@ -71,16 +95,15 @@ const ProductScreen = () => {
               .map((_, index) => <SkeletonCard key={index} />)
           ) : services.length > 0 ? (
             services.map((service) => (
-              <div key={service.id} onClick={() => handleServiceClick(service)}>
+              <div
+                key={service.ProID}
+                onClick={() => handleServiceClick(service)}
+              >
                 <Card className="flex flex-col cursor-pointer h-[360px] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-gray-300">
                   <CardContent className="p-0 flex-grow">
                     <div className="h-[200px] overflow-hidden rounded-t-lg">
                       <img
-                        src={
-                          service.image
-                            ? `${imageBaseUrl}${service.image}`
-                            : spaImage
-                        }
+                        src={service.imageUrl || spaImage}
                         alt={service.ProductName || "Product"}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                         loading="lazy"
@@ -98,7 +121,7 @@ const ProductScreen = () => {
                       {service.ProductDes}
                     </p>
                     <span className="text-base font-medium text-gray-900 mt-auto">
-                      ${Number(service.Price).toFixed(2) || "0.00"}
+                      ₹{Number(service.Price).toFixed(2) || "0.00"}
                     </span>
                   </div>
                 </Card>

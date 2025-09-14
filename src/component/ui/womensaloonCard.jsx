@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "./card";
 import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
-import GetMenServices from "../../backend/men_women_popular/getmenservices";
+import GetSubCategory from "../../backend/subcategory/getsubcategory";
 
 const WomensCard = ({ icon, label, onClick }) => {
   return (
@@ -38,7 +38,8 @@ const WomensSalonCard = ({ onClose, service }) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const data = await GetMenServices();
+      const data = await GetSubCategory(service.id, "SubCategory");
+      setLoading;
       setSubServices(data);
       setLoading(false);
     };
@@ -52,7 +53,7 @@ const WomensSalonCard = ({ onClose, service }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 sm:p-6 w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl relative shadow-xl z-50 transition-all duration-300 animate-in fade-in slide-in-from-bottom-10">
+    <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 sm:p-6 w-full h-[400px] max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl relative shadow-xl z-50 transition-all duration-300 animate-in fade-in slide-in-from-bottom-10">
       {/* Close Button */}
       <button
         className="absolute top-3 right-3 text-gray-400 hover:text-gray-800 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
@@ -77,7 +78,7 @@ const WomensSalonCard = ({ onClose, service }) => {
         </div>
       ) : (
         /* Sub-services Grid */
-        <div className="max-h-[400px] sm:max-h-[500px] md:max-h-[600px] overflow-y-auto hide-scrollbar p-2 sm:p-4">
+        <div className="h-[calc(100%-4rem)] sm:h-[calc(100%-5rem)] overflow-y-auto hide-scrollbar p-2 sm:p-4">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3 sm:gap-4">
             {subServices.map((subService) => (
               <WomensCard

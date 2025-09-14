@@ -19,6 +19,7 @@ import TermsPage from "./component/ui/terms&condition";
 import PrivacyAndPolicy from "./component/ui/privacy&policy";
 import TransactionHistory from "./component/ui/transactions";
 import ProductScreen from "./component/ui/products";
+import ProductMainPage from "./component/ui/productmainpage";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +81,7 @@ const App = () => {
               <Route path="/privacy" element={<PrivacyAndPolicy />} />
               <Route path="/transactions" element={<TransactionHistory />} />
               <Route path="/productscreen" element={<ProductScreen />} />
+              <Route path="/productmainpage" element={<ProductMainPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
