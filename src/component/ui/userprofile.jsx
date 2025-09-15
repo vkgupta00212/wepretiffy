@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaPlus, FaMinus, FaCamera, FaTimes } from "react-icons/fa";
+import {
+  FaPlus,
+  FaMinus,
+  FaCamera,
+  FaTimes,
+  FaEllipsisV,
+} from "react-icons/fa";
 import AddressDetails from "./addressDetailsh.jsx";
 import PersonalDetails from "./personalDetailsh.jsx";
 import ReferAndEarn from "./refer&earn.jsx";
@@ -10,6 +16,7 @@ import TermsPage from "./terms&condition.jsx";
 import AboutUs from "./aboutus.jsx";
 import PrivacyAndPolicy from "./privacy&policy.jsx";
 import EnterReferCode from "./enterrefercode.jsx";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const [openSections, setOpenSections] = useState({});
@@ -17,7 +24,9 @@ const UserProfile = () => {
   const [user, setUser] = useState([]);
   const [preview, setPreview] = useState(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const fileInputRef = useRef(null);
+  const menuRef = useRef(null);
   const phone = localStorage.getItem("userPhone");
 
   useEffect(() => {
@@ -32,6 +41,17 @@ const UserProfile = () => {
     };
     if (phone) fetchUser();
   }, [phone]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const toggleSection = (id) => {
     setOpenSections((prev) => ({
@@ -45,7 +65,6 @@ const UserProfile = () => {
     { id: 2, title: "Saved Addresses", Component: <AddressDetails /> },
     { id: 3, title: "Refer & Earn", Component: <ReferAndEarn /> },
     { id: 4, title: "Enter Referral Code", Component: <EnterReferCode /> },
-    // { id: 5, title: "Referred Friends", Component: <ReferAndEarn /> },
     { id: 5, title: "My Orders", Component: <AddressDetails /> },
     { id: 6, title: "About Us", Component: <AboutUs /> },
     { id: 7, title: "Terms & Conditions", Component: <TermsPage /> },
@@ -121,6 +140,11 @@ const UserProfile = () => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userPhone");
+    navigate("/login");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-50 p-4 sm:p-6 md:p-8 lg:p-12">
       <div className="max-w-4xl mx-auto">
@@ -129,12 +153,52 @@ const UserProfile = () => {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="mb-8"
+          className="mb-8 flex items-center justify-between"
         >
-          <h1 className="text-[18px] sm:text-3xl font-normal text-gray-900 tracking-tight">
-            My Profile
-          </h1>
-          <div className="w-20 h-1 bg-blue-500 rounded-full mt-2" />
+          <div>
+            <h1 className="text-[18px] sm:text-3xl font-normal text-gray-900 tracking-tight">
+              My Profile
+            </h1>
+            <div className="w-20 h-1 bg-blue-500 rounded-full mt-2" />
+          </div>
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+            >
+              <FaEllipsisV className="text-gray-600 text-lg" />
+            </button>
+            <AnimatePresence>
+              {showMenu && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                >
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  >
+                    Logout
+                  </button>
+                  <button
+                    onClick={() => setShowMenu(false)}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  >
+                    Settings
+                  </button>
+                  <button
+                    onClick={() => setShowMenu(false)}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  >
+                    Help
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
 
         {/* Avatar Section */}

@@ -3,6 +3,7 @@ import { Card, CardContent } from "../ui/card";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoIosTime } from "react-icons/io";
 import { MdPayment } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const PaymentCard = ({
   onSelectAddress,
@@ -15,6 +16,7 @@ const PaymentCard = ({
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkScreen = () => setIsMobile(window.innerWidth < 640);
@@ -148,7 +150,7 @@ const PaymentCard = ({
       <button
         onClick={() => {
           if (!isLoggedIn) {
-            window.location.href = "/login";
+            navigate("/login");
           } else {
             onSelectAddress();
           }

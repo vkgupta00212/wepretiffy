@@ -7,6 +7,8 @@ import GetProductImage from "../../backend/getproduct/getproductimage";
 import SuggestProductScreen from "./suggestedproduct";
 import RatingScreen from "./ratingscreen";
 import GetProductReviews from "../../backend/getproduct/getproductreviews";
+import InsertOrder from "../../backend/order/insertorder";
+import GetOrder from "../../backend/order/getorderid";
 
 const ProductMainPage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -17,6 +19,10 @@ const ProductMainPage = () => {
   const location = useLocation();
   const [reviews, setReviews] = useState([]);
   const product = location.state?.subService;
+  const [cartItems, setCartItems] = useState([]);
+  const [orderId, setOrderId] = useState(null);
+
+  const UserID = localStorage.getItem("userPhone");
 
   useEffect(() => {
     const checkScreen = () => setIsMobile(window.innerWidth < 768);
@@ -66,6 +72,27 @@ const ProductMainPage = () => {
   });
 
   useEffect(() => {
+    const fetchExistingOrder = async () => {
+      try {
+        if (!UserID) return;
+
+        const orders = await GetOrder(UserID, "Pending");
+
+        if (orders && orders.length > 0) {
+          setOrderId(orders[0].OrderID); // reuse existing order
+          console.log("Existing order found:", orders[0].OrderID);
+        } else {
+          setOrderId(null); // will generate only on first add
+          console.log("No existing order, will generate new one on first add");
+        }
+      } catch (err) {
+        console.error("GetOrderid failed:", err);
+      }
+    };
+    fetchExistingOrder();
+  }, [UserID]);
+
+  useEffect(() => {
     if (!instanceRef.current || isLoading) return;
     const autoplay = setInterval(() => {
       instanceRef.current?.next();
@@ -103,6 +130,37 @@ const ProductMainPage = () => {
     { id: 2, Rating: "5", Comment: "Excellent service." },
     { id: 3, Rating: "3.8", Comment: "Good but could be better." },
   ];
+
+  const handleAdd = async () => {
+    try {
+      let currentOrderId = orderId;
+
+      if (!currentOrderId) {
+        currentOrderId = `ORD${Date.now()}`;
+        setOrderId(currentOrderId);
+        console.log("Generated new order:", currentOrderId);
+      }
+
+      const orderPayload = {
+        OrderID: currentOrderId,
+        UserID: UserID,
+        OrderType: "Product",
+        ItemImages: "",
+        ItemName: product.ProductName || "",
+        Price: Number(product.Price).toString(),
+        Quantity: "1",
+        Address: "",
+        Slot: "",
+        SlotDatetime: "",
+        OrderDatetime: new Date().toISOString(),
+      };
+
+      const response = await InsertOrder(orderPayload);
+      console.log("InsertOrder API Response:", response);
+    } catch (err) {
+      console.error("InsertOrder failed:", err);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 font-sans">
@@ -199,6 +257,7 @@ const ProductMainPage = () => {
               ₹{Number(product.Price).toFixed(2)}
             </p>
             <button
+              onClick={handleAdd}
               className="w-full mt-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300"
               aria-label="Add to cart"
             >

@@ -101,10 +101,10 @@ const PaymentPage = () => {
     }
 
     // fallback to calculate total
-    const finalAmountRupees = 1;
-    // typeof amount === "number" && !isNaN(amount) && amount > 0
-    //   ? amount
-    //   : calculateTotal();
+    const finalAmountRupees =
+      typeof amount === "number" && !isNaN(amount) && amount > 0
+        ? amount
+        : calculateTotal();
 
     if (!finalAmountRupees || finalAmountRupees <= 0) {
       alert("Invalid payment amount.");

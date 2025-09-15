@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import GetOrder from "../../backend/order/getorderid";
 
 const CartWithBadge = ({ count }) => (
   <div style={{ position: "relative", cursor: "pointer" }}>
-    {/* Shopping cart icon (you can replace with SVG or image) */}
+    {/* Shopping cart icon */}
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -20,7 +22,6 @@ const CartWithBadge = ({ count }) => (
       <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
     </svg>
 
-    {/* Red badge */}
     {count > 0 && (
       <div
         style={{
@@ -48,6 +49,30 @@ const CartWithBadge = ({ count }) => (
 );
 
 const MobileHeader = () => {
+  const navigate = useNavigate();
+  const [cartCount, setCartCount] = useState(0);
+  const userID = localStorage.getItem("userPhone");
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const response = await GetOrder(userID, "Pending"); // 👈 depends on how your GetOrder is written
+        if (response && response.items) {
+          setCartCount(response.items.length);
+        } else if (Array.isArray(response)) {
+          setCartCount(response.length);
+        } else {
+          setCartCount(0);
+        }
+      } catch (error) {
+        console.error("Error fetching order:", error);
+        setCartCount(0);
+      }
+    };
+
+    fetchOrder();
+  }, []);
+
   return (
     <div
       style={{
@@ -87,7 +112,6 @@ const MobileHeader = () => {
           title="546, Block 2, Kirti Nagar Industrial Area, Kirti Nagar, New Delhi, Delhi, India"
         >
           546, Block 2, Kirti Nagar Industrial Area, Kirti ...
-          {/* Down arrow */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="12"
@@ -105,8 +129,11 @@ const MobileHeader = () => {
       </div>
 
       {/* Cart Section */}
-      <div className="w-11 h-11 flex items-center justify-center rounded-full cursor-pointer border border-gray-400 text-gray-800">
-        <CartWithBadge count={3} />
+      <div
+        onClick={() => navigate("/cartpage")}
+        className="w-11 h-11 flex items-center justify-center rounded-full cursor-pointer border border-gray-400 text-gray-800"
+      >
+        <CartWithBadge count={cartCount} />
       </div>
     </div>
   );

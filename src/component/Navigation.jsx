@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import GetUser from "../backend/authentication/getuser";
 import GetWallet from "../backend/getwallet/getwallet";
+import { IoMdCart } from "react-icons/io";
 import logo from "../assets/logo.jpg";
 
 const Navigation = () => {
@@ -170,6 +171,13 @@ const Navigation = () => {
                       className="block px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-gray-700 first:rounded-t-xl"
                     >
                       My Profile
+                    </Link>
+                    <Link
+                      to="/cartpage"
+                      className="flex justify-between block px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-gray-700 first:rounded-t-xl"
+                    >
+                      <span>Cart</span>
+                      <IoMdCart className="h-[15px] w-[15px]" />
                     </Link>
                     <Link
                       to="/transactions"
