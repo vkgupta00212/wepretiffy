@@ -9,10 +9,7 @@ import SpecialForYou from "../component/ui/specialyforyou";
 const Index = () => {
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Banner */}
       <HeroSection />
-
-      {/* Promotional Section */}
       <PromoCard />
 
       {/* Services Section */}

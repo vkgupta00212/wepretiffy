@@ -65,7 +65,7 @@ const MobileNavbar = () => {
 
       {/* Bottom Navbar */}
       <nav
-        className="fixed bottom-0 left-0 w-full h-15 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-[0_-6px_15px_rgba(0,0,0,0.1)] flex justify-around items-center z-50 transition-all duration-500"
+        className="fixed bottom-0 left-0 w-full h-17 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-[0_-6px_15px_rgba(0,0,0,0.1)] flex justify-around items-center z-50 transition-all duration-500"
         aria-label="Mobile navigation"
       >
         {navItems.map((item, index) => (
