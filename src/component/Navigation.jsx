@@ -188,7 +188,6 @@ const Navigation = () => {
                         ₹{wallet[0]?.WalletBalance || 0}
                       </span>
                     </Link>
-
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-red-500 last:rounded-b-xl"

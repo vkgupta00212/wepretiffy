@@ -5,7 +5,7 @@ const CartSummary = ({ total, cartItems }) => {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
-  // ✅ Auto recalc discount whenever cart changes
+
   const totalDiscount = useMemo(() => {
     return cartItems.reduce((acc, item) => {
       const original = Number(item.Price) || 0;

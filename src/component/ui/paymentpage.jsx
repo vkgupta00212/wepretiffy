@@ -19,12 +19,9 @@ const PaymentPage = () => {
   } = location.state || {};
 
   const itemTotal = Number(total) || 0;
-  const discountFee = Number(discountfee) || 0;
-  const surgeCharge = 200;
-  const taxesAndFee = 79;
 
   const calculateTotal = () => {
-    const rawTotal = itemTotal + surgeCharge + taxesAndFee - discountFee;
+    const rawTotal = itemTotal;
     return rawTotal > 0 ? rawTotal : 0;
   };
 
@@ -224,10 +221,7 @@ const PaymentPage = () => {
               setCartItems={setCartItems}
             />
             <PaymentCardButton
-              discountFee={discountFee}
               itemTotal={itemTotal}
-              surgeCharge={surgeCharge}
-              taxesAndFee={taxesAndFee}
               calculateTotal={calculateTotal}
               onProceed={(amount, coupon) =>
                 handleRazorpayPayment(amount, coupon)

@@ -9,7 +9,7 @@ const navItems = [
   {
     label: "WP",
     icon: (
-      <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 group-hover:scale-110">
+      <div className="text-[10px] w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 group-hover:scale-110">
         WP
       </div>
     ),
@@ -19,7 +19,7 @@ const navItems = [
   {
     label: "Skin Analyzer",
     icon: (
-      <span className="text-3xl transition-all duration-300 group-hover:scale-110">
+      <span className="text-[20px] transition-all duration-300 group-hover:scale-110">
         💄
       </span>
     ),
@@ -30,7 +30,7 @@ const navItems = [
     label: "Products",
     icon: (
       <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-        <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
           <rect x="1" y="4" width="14" height="10" fill="#6b7280" />
           <rect x="3" y="2" width="10" height="3" fill="#ffffff" />
         </svg>
@@ -42,7 +42,7 @@ const navItems = [
   {
     label: "Profile",
     icon: (
-      <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110">
+      <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110">
         👤
       </div>
     ),
@@ -52,11 +52,10 @@ const navItems = [
 ];
 
 const MobileNavbar = () => {
-  const [activeTab, setActiveTab] = useState(0); // default: first tab
+  const [activeTab, setActiveTab] = useState(0);
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      {/* Active Component rendered above navbar */}
       <div
         className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-gray-100 p-4 pb-20"
         style={{ maxHeight: "calc(100vh - 80px)" }}
@@ -66,7 +65,7 @@ const MobileNavbar = () => {
 
       {/* Bottom Navbar */}
       <nav
-        className="fixed bottom-0 left-0 w-full h-20 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-[0_-6px_15px_rgba(0,0,0,0.1)] flex justify-around items-center z-50 transition-all duration-500"
+        className="fixed bottom-0 left-0 w-full h-15 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-[0_-6px_15px_rgba(0,0,0,0.1)] flex justify-around items-center z-50 transition-all duration-500"
         aria-label="Mobile navigation"
       >
         {navItems.map((item, index) => (
@@ -83,9 +82,6 @@ const MobileNavbar = () => {
               {item.icon}
               {item.notification && (
                 <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white animate-pulse" />
-              )}
-              {activeTab === index && (
-                <span className="absolute -bottom-2 w-2 h-2 bg-indigo-700 rounded-full" />
               )}
             </div>
             <span

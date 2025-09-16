@@ -13,7 +13,7 @@ class GetUserModel {
 
   static fromJson(json) {
     return new GetUserModel(
-      json.id || 0,
+      json.id || 0, 
       json.Image || "",
       json.Fullname || "",
       json.PhoneNumber || "",

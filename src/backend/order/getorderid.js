@@ -40,7 +40,7 @@ class GetOrderModel {
       json.OrderType || "",
       json.ItemImages || "",
       json.ItemName || "",
-      Number(json.Price) || 0, // 👈 ensure number
+      Number(json.Price) || 0,
       Number(json.Quantity) || 0,
       json.Address || "",
       json.Slot || "",

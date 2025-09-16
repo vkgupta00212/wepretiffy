@@ -146,19 +146,38 @@ const PaymentCard = ({
   );
 
   const mobile = (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg">
-      <button
-        onClick={() => {
-          if (!isLoggedIn) {
-            navigate("/login");
-          } else {
-            onSelectAddress();
-          }
-        }}
-        className="w-full py-3 rounded-lg font-medium shadow bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:ring-2 focus:ring-indigo-300"
-      >
-        {isLoggedIn ? "Add Address & Slot" : "Login to Continue"}
-      </button>
+    <div className="fixed bottom-0 left-0 right-0 z-50">
+      {/* Selected Summary Tab */}
+      {(selectedAddress || selectedSlot) && (
+        <div className="mb-2 mx-3 p-3 rounded-lg border border-gray-200 bg-white shadow-md">
+          {selectedAddress && (
+            <p className="text-xs font-medium text-gray-800 truncate">
+              📍 {selectedAddress.FullAddress}
+            </p>
+          )}
+          {selectedSlot && (
+            <p className="text-xs text-gray-600">
+              ⏰ {selectedSlot.day.label}, {selectedSlot.time}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Bottom Button */}
+      <div className="p-4 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg">
+        <button
+          onClick={() => {
+            if (!isLoggedIn) {
+              navigate("/login");
+            } else {
+              onSelectAddress();
+            }
+          }}
+          className="w-full py-3 rounded-lg font-medium shadow bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:ring-2 focus:ring-indigo-300"
+        >
+          {isLoggedIn ? "Add Address & Slot" : "Login to Continue"}
+        </button>
+      </div>
     </div>
   );
 

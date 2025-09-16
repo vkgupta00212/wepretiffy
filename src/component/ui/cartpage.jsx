@@ -30,7 +30,6 @@ const CartPage = () => {
     fetchCartOrders();
   }, [fetchCartOrders]);
 
-  // Remove item
   const handleRemove = async (id) => {
     setDeletingItemId(id);
     setOrders((prev) => prev.filter((item) => item.ID !== id));
@@ -43,7 +42,6 @@ const CartPage = () => {
     }
   };
 
-  // Update quantity
   const handleUpdateQuantity = async (id, newQty) => {
     setOrders((prev) =>
       prev.map((item) =>
@@ -57,7 +55,6 @@ const CartPage = () => {
     }
   };
 
-  // Calculate totals
   const total = useMemo(
     () =>
       orders.reduce(
@@ -78,7 +75,6 @@ const CartPage = () => {
     [orders]
   );
 
-  // Proceed to payment
   const handleProceed = () => {
     navigate("/paymentpage", {
       state: {
