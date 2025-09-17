@@ -24,7 +24,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative bg-white mt-[30px] overflow-hidden">
+    <div className="relative bg-white overflow-hidden">
       {/* Blurred Background on Modal */}
       <div
         className={`${
@@ -37,7 +37,7 @@ const HeroSection = () => {
           className="flex flex-col lg:flex-row items-center justify-between w-full px- lg:px-28 py-4 lg:py-24"
         >
           {/* Left */}
-          <div className="w-full lg:w-[95%] flex flex-col items-center lg:items-start text-center lg:text-left gap-6 ">
+          <div className="w-full lg:w-[95%] flex flex-col items-center lg:items-start text-center lg:text-left gap-1 ">
             {isMobile && <MobileHeader />}
             <ServiceCard onServiceSelect={handleServiceClick} />
           </div>

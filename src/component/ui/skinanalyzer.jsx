@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 import { motion, AnimatePresence } from "framer-motion";
 import GetServicePack from "../../backend/servicepack/getservicepack";
 import SuggestAnalyze from "./suggestanalyze";
 
 const SkinAnalyzer = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState("getStarted"); // 'getStarted' | 'camera' | 'results'
   const [analysisData, setAnalysisData] = useState([]); // Store API results
   const [loading, setLoading] = useState(false); // For analysis loading state
@@ -48,7 +50,7 @@ const SkinAnalyzer = () => {
   useEffect(() => {
     if (step === "camera" && cameraReady) {
       console.log("Camera step activated and camera is ready");
-      const duration = 4500; // 2.5 seconds
+      const duration = 4500; // 4.5 seconds
       const interval = 25; // Update every 25ms for smoother animation
       const steps = duration / interval;
       let currentStep = 0;
@@ -105,24 +107,55 @@ const SkinAnalyzer = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-6"
+          className="relative flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 px-4 sm:px-6 pt-16"
         >
-          <div className="max-w-md w-full bg-white shadow-2xl rounded-2xl p-8 text-center border border-gray-100">
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Skin Analyzer
-            </h2>
-            <p className="text-gray-600 mb-6 text-sm leading-relaxed">
-              Discover personalized skincare with our AI-powered analyzer. Scan
-              your face in seconds for tailored recommendations.
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setStep("camera")}
-              className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-lg"
-            >
-              Get Started
-            </motion.button>
+          {/* Header with Back Button and Title */}
+          <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10 border-b border-gray-200">
+            <div className="flex items-center justify-start px-4 py-3 sm:px-6">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => navigate(-1)}
+                className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                aria-label="Go back"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-gray-600 hover:text-gray-800"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </motion.button>
+              <h2 className="text-xl sm:text-3xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Skin Analyzer
+              </h2>
+            </div>
+          </div>
+
+          {/* Main Content Card */}
+          <div className="flex items-center justify-center flex-grow">
+            <div className="max-w-md w-full bg-white shadow-2xl rounded-2xl p-6 sm:p-8 text-center border border-gray-100">
+              <p className="text-gray-600 mb-6 text-sm sm:text-base leading-relaxed">
+                Discover personalized skincare with our AI-powered analyzer.
+                Scan your face in seconds for tailored recommendations.
+              </p>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setStep("camera")}
+                className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-lg"
+              >
+                Get Started
+              </motion.button>
+            </div>
           </div>
         </motion.div>
       </AnimatePresence>
@@ -138,10 +171,10 @@ const SkinAnalyzer = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="fixed inset-0 bg-gray-900/95 flex items-center justify-center z-50 p-6"
+          className="fixed inset-0 bg-gray-900/95 flex items-center justify-center z-50 p-4 sm:p-6"
         >
-          <div className="max-w-lg w-full bg-white shadow-2xl rounded-2xl p-8 text-center border border-gray-100 relative">
-            <h2 className="text-xl font-bold mb-4 text-gray-900">
+          <div className="max-w-lg w-full bg-white shadow-2xl rounded-2xl p-6 sm:p-8 text-center border border-gray-100 relative">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-900">
               Analyzing Your Skin...
             </h2>
             <div className="relative w-full max-w-[300px] aspect-square mx-auto">
@@ -196,11 +229,11 @@ const SkinAnalyzer = () => {
               )}
             </div>
             {cameraReady ? (
-              <p className="text-gray-600 mt-4 mb-4 text-sm">
+              <p className="text-gray-600 mt-4 mb-4 text-sm sm:text-base">
                 Scanning in progress...
               </p>
             ) : (
-              <p className="text-gray-600 mt-4 mb-4 text-sm">
+              <p className="text-gray-600 mt-4 mb-4 text-sm sm:text-base">
                 Starting camera...
               </p>
             )}
@@ -209,7 +242,7 @@ const SkinAnalyzer = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setStep("getStarted")}
-              className="text-indigo-600 hover:underline font-medium"
+              className="text-indigo-600 hover:underline font-medium text-sm sm:text-base"
             >
               Cancel
             </motion.button>
@@ -228,7 +261,7 @@ const SkinAnalyzer = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className="fixed inset-0 bg-white/95 backdrop-blur-md flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-white/95 backdrop-blur-md flex items-center justify-center z-50 p-4 sm:p-6"
         >
           <div>
             <SuggestAnalyze />

@@ -32,7 +32,7 @@ const GetServicePack = async (id) => {
 
   try {
     const response = await axios.post(
-      "https://weprettify.com/APIs/APIs.asmx/GetServicePack",
+      "https://api.weprettify.com/APIs/APIs.asmx/GetServicePack",
       formData,
       {
         headers: {

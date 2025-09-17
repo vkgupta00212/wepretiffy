@@ -24,7 +24,7 @@ const GetSuggestProduct = async () => {
 
   try {
     const response = await axios.post(
-      "https://weprettify.com/APIs/APIs.asmx/ShowSuggestedProducts",
+      "https://api.weprettify.com/APIs/APIs.asmx/ShowSuggestedProducts",
       formData,
       {
         headers: {

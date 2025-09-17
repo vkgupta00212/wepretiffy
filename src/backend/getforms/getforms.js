@@ -23,7 +23,7 @@ const GetForms = async (formtype) => {
 
   try {
     const response = await axios.post(
-      "https://weprettify.com/APIs/APIs.asmx/GetForms",
+      "https://api.weprettify.com/APIs/APIs.asmx/GetForms",
       formData,
       {
         headers: {

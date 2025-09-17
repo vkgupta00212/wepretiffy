@@ -31,7 +31,7 @@ const GetAddress = async (Phone) => {
 
   try {
     const response = await axios.post(
-      "https://weprettify.com/APIs/APIs.asmx/ShowAddresss",
+      "https://api.weprettify.com/APIs/APIs.asmx/ShowAddresss",
       formData,
       { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
     );

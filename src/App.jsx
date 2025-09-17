@@ -47,7 +47,11 @@ const Layout = ({ children }) => {
           <Navbar />
         </header>
       )}
-      <main className={`flex-grow ${!isMobile ? "pt-10" : "pt-0"}`}>
+      <main
+        className={`flex-grow ${
+          !isMobile ? "pt-16" : isHomePage ? "pb-16" : "pb-0"
+        }`}
+      >
         {children}
       </main>
       {isMobile && isHomePage && (
@@ -55,7 +59,7 @@ const Layout = ({ children }) => {
           <MobileNavbar />
         </div>
       )}
-      <footer className="mt-8 bg-gray-100">
+      <footer className="mt-8 bg-gray-100 z-10">
         <Footer />
       </footer>
     </div>

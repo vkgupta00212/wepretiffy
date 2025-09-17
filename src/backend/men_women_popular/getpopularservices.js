@@ -29,7 +29,7 @@ const GetPopularServices = async () => {
 
   try {
     const response = await axios.post(
-      "https://weprettify.com/APIs/APIs.asmx/GetPopularServices",
+      "https://api.weprettify.com/APIs/APIs.asmx/GetPopularServices",
       formData,
       {
         headers: {
@@ -52,7 +52,7 @@ const GetPopularServices = async () => {
       return rawData.map((item) => GetPopularServicesModel.fromJson(item));
     } else {
       console.error("API response is not an array:", rawData);
-      return [];    
+      return [];
     }
   } catch (error) {
     console.log(error);

@@ -13,7 +13,7 @@ class GetUserModel {
 
   static fromJson(json) {
     return new GetUserModel(
-      json.id || 0, 
+      json.id || 0,
       json.Image || "",
       json.Fullname || "",
       json.PhoneNumber || "",
@@ -31,7 +31,7 @@ const GetUser = async (phone) => {
 
   try {
     const response = await axios.post(
-      "https://weprettify.com/APIs/APIs.asmx/GetProfile",
+      "https://api.weprettify.com/APIs/APIs.asmx/GetProfile",
       formData,
       {
         headers: {

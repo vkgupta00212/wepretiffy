@@ -68,7 +68,7 @@ const GetOrders = async (UserID, Status = "Pending") => {
 
   try {
     const response = await axios.post(
-      "https://weprettify.com/APIs/APIs.asmx/ShowOrders",
+      "https://api.weprettify.com/APIs/APIs.asmx/ShowOrders",
       formData,
       {
         headers: {
