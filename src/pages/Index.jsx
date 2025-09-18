@@ -8,7 +8,6 @@ import BecomeWePretiffyCard from "../component/ui/becomeweprettifycard";
 import SpecialForYou from "../component/ui/specialyforyou";
 import Footer from "../component/Footer";
 
-// Lazy load heavy components
 const LazyServicesCarousel2 = lazy(() =>
   import("../component/ServicesCarousel2")
 );
@@ -73,7 +72,7 @@ const Index = () => {
           </Suspense>
         </div>
       </section>
-      <footer className="mt-8 bg-gray-100 z-10">
+      <footer className="mt-8 bg-gray-100 z-10 md:hidden">
         <Footer />
       </footer>
     </div>

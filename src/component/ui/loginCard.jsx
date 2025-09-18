@@ -1,21 +1,19 @@
 import { useState } from "react";
-import { Phone } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Phone, X } from "lucide-react";
 
-const LoginCard = () => {
+const LoginCard = ({ onClose, onSubmit }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const isValid = phoneNumber.length === 10;
-  const navigate = useNavigate();
 
   const handleContinue = async () => {
     if (!isValid || loading) return;
 
     setLoading(true);
-
     try {
       localStorage.setItem("userPhone", phoneNumber);
-      navigate("/otpverification");
+      // Instead of navigation, call parent callback
+      onSubmit(phoneNumber);
     } catch (error) {
       console.error("Error saving phone number:", error);
     } finally {
@@ -24,7 +22,15 @@ const LoginCard = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 sm:p-8 bg-white rounded-2xl shadow-xl border border-gray-100 font-sans transition-all duration-300 hover:shadow-2xl">
+    <div className="relative w-full max-w-md mx-auto p-6 sm:p-8 bg-white rounded-2xl shadow-xl border border-gray-100 font-sans transition-all duration-300 hover:shadow-2xl">
+      {/* Close Button (X) */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors"
+      >
+        <X className="w-6 h-6" />
+      </button>
+
       <div className="mb-6">
         <Phone className="w-8 h-8 mb-3 text-indigo-600" />
         <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">

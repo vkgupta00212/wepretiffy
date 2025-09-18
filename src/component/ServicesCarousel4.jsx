@@ -80,7 +80,7 @@ const ServicesCarousel4 = () => {
     navigate("/womensaloonIn", { state: { subService: service } });
   };
 
-  const imageBaseUrl = "https://weprettify.com/Images/";
+  const imageBaseUrl = "https://api.weprettify.com/Images/";
 
   // Skeleton Loader
   const SkeletonCard = () => (

@@ -212,7 +212,7 @@ const UserProfile = () => {
             <img
               src={
                 user[0]?.Image
-                  ? `https://weprettify.com/images/${user[0].Image}`
+                  ? `https://api.weprettify.com/Images/${user[0].Image}`
                   : "https://via.placeholder.com/150?text=Avatar"
               }
               alt={user[0]?.Fullname || "ProfileHXProfile"}

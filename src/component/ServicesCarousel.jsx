@@ -31,7 +31,7 @@ const ServicesCarousel = () => {
               <Card className="overflow-hidden cursor-pointer shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="p-0">
                   <img
-                    src={`https://weprettify.com/images/${service.ServiceImage}`}
+                    src={`https://api.weprettify.com/Images/${service.ServiceImage}`}
                     alt={service.ServiceName}
                     className="w-full h-[160px] object-cover"
                   />

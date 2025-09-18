@@ -91,7 +91,7 @@ const ServiceCardSection = ({ onServiceSelect }) => {
                 {serviceList.map((service) => (
                   <ServiceCard
                     key={service.id}
-                    icon={`https://weprettify.com/images/${service.ServiceImage}`}
+                    icon={`https://api.weprettify.com/Images/${service.ServiceImage}`}
                     label={service.ServiceName}
                     onClick={() => onServiceSelect(service)}
                   />
