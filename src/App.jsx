@@ -42,23 +42,30 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen font-sans flex flex-col bg-gray-50">
+      {/* Desktop Navbar */}
       {!isMobile && (
         <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
           <Navbar />
         </header>
       )}
+
+      {/* Main Content */}
       <main
-        className={`flex-grow ${
-          !isMobile ? "pt-16" : isHomePage ? "pb-16" : "pb-0"
-        }`}
+        className={`flex-grow px-4 sm:px-6 lg:px-8 
+          ${!isMobile ? "pt-20" : "pt-6"} 
+          ${isHomePage && isMobile ? "pb-20" : "pb-6"}`}
       >
         {children}
       </main>
+
+      {/* Mobile Navbar (only on home) */}
       {isMobile && isHomePage && (
         <div className="fixed bottom-0 left-0 w-full z-50 bg-white shadow-t-md">
           <MobileNavbar />
         </div>
       )}
+
+      {/* Footer */}
       <footer className="mt-8 bg-gray-100 z-10">
         <Footer />
       </footer>
