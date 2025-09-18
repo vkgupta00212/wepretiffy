@@ -41,7 +41,10 @@ const Layout = ({ children }) => {
   const isHomePage = location.pathname === "/";
 
   return (
-    <div className="min-h-screen font-sans flex flex-col bg-gray-50">
+    <div
+      className="min-h-screen font-sans flex flex-col bg-gray-50 
+                 mt-[env(safe-area-inset-top)] sm:mt-2"
+    >
       {/* Desktop Navbar */}
       {!isMobile && (
         <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
