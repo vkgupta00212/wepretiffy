@@ -18,6 +18,7 @@ import EnterReferCode from "./enterrefercode.jsx";
 import { useNavigate } from "react-router-dom";
 import LoginCard from "./loginCard.jsx";
 import OtpVerification from "./otpverification.jsx";
+import RegisterUser from "../../backend/authentication/register.js";
 
 const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({ width: undefined });
@@ -33,8 +34,11 @@ const useWindowSize = () => {
 };
 
 const UserProfile = () => {
+  const phone = localStorage.getItem("userPhone");
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const [openSections, setOpenSections] = useState({});
   const [avatar, setAvatar] = useState(null);
+  const [base64Image, setBase64Image] = useState(null);
   const [user, setUser] = useState([]);
   const [preview, setPreview] = useState(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
@@ -42,6 +46,8 @@ const UserProfile = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [pendingPhone, setPendingPhone] = useState("");
   const fileInputRef = useRef(null);
   const menuRef = useRef(null);
@@ -50,9 +56,6 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const isMobile = width < 640;
-
-  const phone = localStorage.getItem("userPhone");
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   // Prevent background scrolling when modals are open
   useEffect(() => {
@@ -90,7 +93,6 @@ const UserProfile = () => {
     return () => modalElement.removeEventListener("keydown", handleKeyDown);
   }, [showLoginModal]);
 
-  // Focus trap for OTP modal
   useEffect(() => {
     if (!showOtpModal || !otpModalRef.current) return;
     const modalElement = otpModalRef.current;
@@ -207,6 +209,90 @@ const UserProfile = () => {
     window.location.reload();
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatar(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setBase64Image(
+          reader.result.replace(/^data:image\/[a-zA-Z]+;base64,/, "")
+        );
+        setPreview(reader.result);
+      };
+      reader.onerror = (error) => {
+        console.error("Error reading file:", error);
+        alert("⚠️ Error reading the selected image.");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!base64Image) {
+      alert("⚠️ Please select an image before saving.");
+      return;
+    }
+
+    setIsUploading(true);
+    setProgress(0);
+
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return prev;
+        }
+        return prev + 10;
+      });
+    }, 200);
+
+    try {
+      const res = await RegisterUser(
+        base64Image,
+        "Edit Profile Image",
+        "",
+        phone,
+        "",
+        "",
+        ""
+      );
+
+      if (res) {
+        setProgress(100);
+        setTimeout(() => {
+          setUser((prev) =>
+            prev.map((u, i) => (i === 0 ? { ...u, Image: base64Image } : u))
+          );
+          alert("✅ Profile image updated successfully!");
+          setShowUploadModal(false);
+          setAvatar(null);
+          setBase64Image(null);
+          setPreview(null);
+          if (fileInputRef.current) fileInputRef.current.value = "";
+        }, 500);
+        window.location.reload();
+      } else {
+        alert("❌ Failed to update image.");
+      }
+    } catch (error) {
+      console.error("Image upload error:", error);
+      alert("❌ Error updating profile image.");
+    } finally {
+      clearInterval(progressInterval);
+      setIsUploading(false);
+      setProgress(0);
+    }
+  };
+
+  const handleCancelUpload = () => {
+    setShowUploadModal(false);
+    setAvatar(null);
+    setBase64Image(null);
+    setPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const sections = [
     { id: 1, title: "Personal Details", Component: <PersonalDetails /> },
     { id: 2, title: "Saved Addresses", Component: <AddressDetails /> },
@@ -274,12 +360,22 @@ const UserProfile = () => {
             className={`px-8 py-3 text-lg font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 ${
               isProcessing ? "opacity-50 cursor-not-allowed" : ""
             }`}
+            aria-label={
+              isProcessing ? "Processing login" : "Log in to your account"
+            }
+            aria-busy={isProcessing}
           >
-            {isProcessing ? "Processing..." : "Get Started"}
+            {isProcessing ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2" />
+                Processing...
+              </div>
+            ) : (
+              "Get Started"
+            )}
           </button>
         </motion.div>
 
-        {/* LOGIN MODAL */}
         <AnimatePresence>
           {showLoginModal && (
             <motion.div
@@ -328,7 +424,6 @@ const UserProfile = () => {
           )}
         </AnimatePresence>
 
-        {/* OTP MODAL */}
         <AnimatePresence>
           {showOtpModal && (
             <motion.div
@@ -399,50 +494,55 @@ const UserProfile = () => {
             </h1>
             <div className="w-20 h-1 bg-blue-500 rounded-full mt-2" />
           </div>
-          <div className="relative" ref={menuRef}>
-            <motion.button
-              onClick={() => setShowMenu(!showMenu)}
-              className="p-2 rounded-full hover:bg-gray-200 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FaEllipsisV className="text-gray-600 text-lg" />
-            </motion.button>
-            <AnimatePresence>
-              {showMenu && (
-                <motion.div
-                  variants={menuVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  transition={{ duration: 0.2 }}
-                  className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
-                >
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+          {isMobile && (
+            <div className="relative" ref={menuRef}>
+              <motion.button
+                onClick={() => setShowMenu(!showMenu)}
+                className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Toggle profile menu"
+              >
+                <FaEllipsisV className="text-gray-600 text-lg" />
+              </motion.button>
+              <AnimatePresence>
+                {showMenu && (
+                  <motion.div
+                    variants={menuVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
                   >
-                    Logout
-                  </button>
-                  <button
-                    onClick={() => setShowMenu(false)}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                  >
-                    Settings
-                  </button>
-                  <button
-                    onClick={() => setShowMenu(false)}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                  >
-                    Help
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      aria-label="Log out"
+                    >
+                      Logout
+                    </button>
+                    <button
+                      onClick={() => setShowMenu(false)}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      aria-label="Settings"
+                    >
+                      Settings
+                    </button>
+                    <button
+                      onClick={() => setShowMenu(false)}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      aria-label="Help"
+                    >
+                      Help
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
         </motion.div>
 
-        {/* AVATAR + NAME */}
         <motion.div
           variants={avatarVariants}
           initial="hidden"
@@ -453,6 +553,7 @@ const UserProfile = () => {
           <motion.div
             className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg cursor-pointer group"
             whileHover={{ scale: 1.05 }}
+            aria-label="Change profile picture"
           >
             <img
               src={
@@ -496,6 +597,7 @@ const UserProfile = () => {
                 onClick={() => toggleSection(section.id)}
                 className="p-4 sm:p-5 cursor-pointer flex items-center justify-between bg-gradient-to-r from-blue-600 to-indigo-600 text-white transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
                 whileHover={{ scale: 1.01 }}
+                aria-label={`Toggle ${section.title} section`}
               >
                 <h3 className="text-sm sm:text-base font-semibold tracking-tight">
                   {section.title}
@@ -531,7 +633,6 @@ const UserProfile = () => {
         </div>
       </div>
 
-      {/* UPLOAD MODAL */}
       <AnimatePresence>
         {showUploadModal && (
           <motion.div
@@ -542,6 +643,7 @@ const UserProfile = () => {
             className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 pointer-events-auto upload-modal"
             aria-modal="true"
             role="dialog"
+            aria-busy={isUploading}
           >
             <motion.div
               variants={modalVariants}
@@ -556,10 +658,12 @@ const UserProfile = () => {
                   Upload Profile Picture
                 </h2>
                 <motion.button
-                  onClick={() => setShowUploadModal(false)}
+                  onClick={handleCancelUpload}
                   className="text-gray-500 hover:text-gray-700 transition-colors"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
+                  aria-label="Close upload modal"
+                  disabled={isUploading}
                 >
                   <FaTimes className="text-lg" />
                 </motion.button>
@@ -569,7 +673,7 @@ const UserProfile = () => {
                   <img
                     src={
                       preview ||
-                      avatar ||
+                      base64Image ||
                       "https://via.placeholder.com/150?text=Preview"
                     }
                     alt="Avatar Preview"
@@ -580,34 +684,71 @@ const UserProfile = () => {
                   type="file"
                   accept="image/*"
                   ref={fileInputRef}
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const previewUrl = URL.createObjectURL(file);
-                      setPreview(previewUrl);
-                    }
-                  }}
+                  onChange={handleImageChange}
                   className="hidden"
+                  disabled={isUploading}
                 />
                 <motion.button
                   onClick={() => fileInputRef.current.click()}
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  className={`bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 ${
+                    isUploading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  whileHover={{ scale: isUploading ? 1 : 1.05 }}
+                  whileTap={{ scale: isUploading ? 1 : 0.95 }}
+                  aria-label="Choose image file"
+                  disabled={isUploading}
                 >
-                  Choose Image
+                  {isUploading ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2" />
+                      Uploading...
+                    </div>
+                  ) : (
+                    "Choose Image"
+                  )}
                 </motion.button>
-                {preview && (
-                  <motion.button
-                    onClick={() => {
-                      // Placeholder for handleSaveAvatar
-                    }}
-                    className="bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold py-2 px-6 rounded-lg hover:from-green-700 hover:to-green-800 transition-all duration-200 mt-4"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Save Avatar
-                  </motion.button>
+                {base64Image && (
+                  <div className="mt-4 w-full">
+                    <motion.button
+                      onClick={handleSave}
+                      className={`w-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold py-2 px-6 rounded-lg hover:from-green-700 hover:to-green-800 transition-all duration-200 ${
+                        isUploading ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                      whileHover={{ scale: isUploading ? 1 : 1.05 }}
+                      whileTap={{ scale: isUploading ? 1 : 0.95 }}
+                      aria-label={isUploading ? "Saving avatar" : "Save avatar"}
+                      disabled={isUploading}
+                    >
+                      {isUploading ? (
+                        <div className="flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2" />
+                          Saving...
+                        </div>
+                      ) : (
+                        "Save Avatar"
+                      )}
+                    </motion.button>
+                    {isUploading && (
+                      <div className="mt-4 w-full">
+                        <div className="bg-gray-200 rounded-lg h-2 overflow-hidden">
+                          <motion.div
+                            className="bg-indigo-600 h-full"
+                            initial={{ width: "0%" }}
+                            animate={{ width: `${progress}%` }}
+                            transition={{ duration: 0.2 }}
+                            role="progressbar"
+                            aria-valuenow={progress}
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-label="Upload progress"
+                          />
+                        </div>
+                        <p className="text-sm text-gray-600 mt-2 text-center">
+                          Uploading... {progress}%
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </motion.div>

@@ -38,6 +38,7 @@ const SelectServiceCardSection = ({
 }) => {
   const [getServiceTab, setGetServiceTab] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false); // <-- Add expand state
 
   useEffect(() => {
     const fetchServiceTab = async () => {
@@ -69,9 +70,26 @@ const SelectServiceCardSection = ({
         {subService?.text || "Salon Luxe"}
       </h1>
 
-      <p className="text-[12px] md:text-[14px] lg:text-[15px] text-gray-600 mb-6 line-clamp-3 overflow-hidden">
-        {subService?.description || "No description available"}
-      </p>
+      {/* Description with expand/collapse */}
+      <div className="mb-4">
+        <p
+          className={`text-[12px] md:text-[14px] lg:text-[15px] text-gray-600 mb-2 transition-all duration-300 ${
+            isExpanded ? "" : "line-clamp-3 overflow-hidden"
+          }`}
+        >
+          {subService?.description || "No description available"}
+        </p>
+
+        {subService?.description &&
+          subService?.description.length > 100 && ( // Only show if long text
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-indigo-600 text-sm font-medium hover:underline"
+            >
+              {isExpanded ? "Read less" : "Read more"}
+            </button>
+          )}
+      </div>
 
       <div className="bg-gradient-to-br from-gray-50 to-white p-4 border border-gray-200 rounded-lg w-full overflow-hidden shadow-sm">
         <h2 className="text-[13px] font-semibold mb-4 text-gray-900">

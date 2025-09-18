@@ -1,25 +1,40 @@
 import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import CourseCard from "./coursecard";
 
 const Course = () => {
-  //   const addToCart = (item) => {
-  //     const price = parseInt(item.discountfee || item.fees || 0);
-  //     setCartItems((prev) => {
-  //       const exists = prev.find((i) => i.id === item.id);
-  //       if (exists) {
-  //         return prev.map((i) =>
-  //           i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-  //         );
-  //       } else {
-  //         return [...prev, { ...item, quantity: 1, price }];
-  //       }
-  //     });
-  //   };
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.5 } },
+  };
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 px-4 sm:px-6 lg:px-12 py-12 sm:py-16 lg:py-20">
-      <CourseCard />
-    </div>
+    <motion.section
+      className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-50 px-4 sm:px-6 lg:px-12 py-12 sm:py-16"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      aria-label="Course section"
+    >
+      <div className="max-w-7xl mx-auto">
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <CourseCard />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </motion.section>
   );
 };
 

@@ -9,6 +9,7 @@ const CartPage = () => {
   const [orders, setOrders] = useState([]);
   const [isCartLoading, setIsCartLoading] = useState(false);
   const [deletingItemId, setDeletingItemId] = useState(null);
+  const [updatingItemId, setUpdatingItemId] = useState(null); // New state for quantity update loading
   const UserID = localStorage.getItem("userPhone");
   const navigate = useNavigate();
 
@@ -32,7 +33,10 @@ const CartPage = () => {
 
   const handleRemove = async (id) => {
     setDeletingItemId(id);
+
+    // Optimistic remove
     setOrders((prev) => prev.filter((item) => item.ID !== id));
+
     try {
       await DeleteOrder(id);
     } catch (err) {
@@ -42,19 +46,55 @@ const CartPage = () => {
     }
   };
 
-  const handleUpdateQuantity = async (id, newQty) => {
+  // Update quantity (uses OrderID)
+  // Update quantity (uses OrderID)
+  const handleUpdateQuantity = async (orderId, newQty) => {
+    const orderToUpdate = orders.find((item) => item.OrderID === orderId);
+    if (!orderToUpdate) return;
+
+    // Optimistic update
     setOrders((prev) =>
       prev.map((item) =>
-        item.ID === id ? { ...item, Quantity: newQty } : item
+        item.OrderID === orderId ? { ...item, Quantity: newQty } : item
       )
     );
+
+    setUpdatingItemId(orderId);
+
     try {
-      await UpdateQuantity(id, newQty);
+      await UpdateQuantity({
+        OrderID: orderToUpdate.OrderID,
+        UserID: orderToUpdate.UserID || UserID,
+        OrderType: orderToUpdate.OrderType || "Pending",
+        ItemImages: "",
+        ItemName: "",
+        Price: "",
+        Quantity: newQty,
+        Address: "",
+        Slot: "",
+        SlotDatetime: "",
+        OrderDatetime: "",
+      });
+
+      // Add artificial delay (2s)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     } catch (err) {
       console.error("Update quantity failed:", err);
+
+      // Rollback if API fails
+      setOrders((prev) =>
+        prev.map((item) =>
+          item.OrderID === orderId
+            ? { ...item, Quantity: orderToUpdate.Quantity }
+            : item
+        )
+      );
+    } finally {
+      setUpdatingItemId(null);
     }
   };
 
+  // Total & Discounts
   const total = useMemo(
     () =>
       orders.reduce(
@@ -95,7 +135,16 @@ const CartPage = () => {
         </h2>
 
         {isCartLoading ? (
-          <p className="text-center text-gray-500 py-4">Loading cart...</p>
+          <div
+            className="flex justify-center items-center py-4"
+            aria-live="polite"
+            aria-busy="true"
+          >
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-600"></div>
+            <p className="ml-3 text-gray-500 text-base sm:text-lg">
+              Loading cart...
+            </p>
+          </div>
         ) : orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 sm:py-12">
             <p className="text-gray-500 text-base sm:text-lg mb-2">
@@ -123,6 +172,12 @@ const CartPage = () => {
                   onClick={() => handleRemove(item.ID)}
                   disabled={deletingItemId === item.ID}
                   className="flex items-center text-indigo-600 text-sm mt-2 hover:text-indigo-800 transition-colors duration-200 disabled:opacity-50"
+                  aria-label={
+                    deletingItemId === item.ID
+                      ? `Removing ${item.ItemName}`
+                      : `Remove ${item.ItemName}`
+                  }
+                  aria-busy={deletingItemId === item.ID}
                 >
                   {deletingItemId === item.ID ? (
                     <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-indigo-600 mr-1" />
@@ -134,34 +189,57 @@ const CartPage = () => {
               </div>
 
               {/* Right: Quantity & Price */}
-              <div className="flex flex-col items-end">
+              <div
+                className="flex flex-col items-end"
+                aria-busy={updatingItemId === item.OrderID}
+              >
                 <div className="flex items-center bg-gray-50 rounded-full px-2 py-1 gap-2 sm:gap-3 text-sm font-medium text-gray-700 shadow-sm">
                   <button
                     onClick={() =>
                       handleUpdateQuantity(
-                        item.ID,
+                        item.OrderID,
                         Math.max(1, Number(item.Quantity) - 1)
                       )
                     }
-                    disabled={Number(item.Quantity) <= 1}
+                    disabled={
+                      Number(item.Quantity) <= 1 ||
+                      updatingItemId === item.OrderID
+                    }
                     className="p-1 hover:bg-gray-200 rounded-full transition-colors duration-200 disabled:opacity-50"
+                    aria-label={`Decrease quantity of ${item.ItemName}`}
+                    aria-disabled={
+                      Number(item.Quantity) <= 1 ||
+                      updatingItemId === item.OrderID
+                    }
                   >
                     <Minus size={16} />
                   </button>
-                  <span className="w-6 sm:w-8 text-center">
-                    {item.Quantity}
-                  </span>
+                  {updatingItemId === item.OrderID ? (
+                    <div className="w-6 sm:w-8 text-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-indigo-600" />
+                    </div>
+                  ) : (
+                    <span className="w-6 sm:w-8 text-center">
+                      {item.Quantity}
+                    </span>
+                  )}
                   <button
                     onClick={() =>
-                      handleUpdateQuantity(item.ID, Number(item.Quantity) + 1)
+                      handleUpdateQuantity(
+                        item.OrderID,
+                        Number(item.Quantity) + 1
+                      )
                     }
-                    className="p-1 hover:bg-gray-200 rounded-full transition-colors duration-200"
+                    disabled={updatingItemId === item.OrderID}
+                    className="p-1 hover:bg-gray-200 rounded-full transition-colors duration-200 disabled:opacity-50"
+                    aria-label={`Increase quantity of ${item.ItemName}`}
+                    aria-disabled={updatingItemId === item.OrderID}
                   >
                     <Plus size={16} />
                   </button>
                 </div>
                 <p className="text-base sm:text-lg font-bold text-indigo-600 mt-2 sm:mt-3">
-                  ₹{Number(item.Price) * Number(item.Quantity)}
+                  ₹{(Number(item.Price) * Number(item.Quantity)).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -177,9 +255,10 @@ const CartPage = () => {
               <button
                 onClick={handleProceed}
                 className="w-full flex items-center justify-between bg-indigo-600 text-white px-4 sm:px-5 py-2 sm:py-3 rounded-lg shadow hover:bg-indigo-700 transition-colors duration-200"
+                aria-label="Proceed to payment"
               >
                 <span className="text-sm sm:text-base font-semibold">
-                  Total: ₹{total}
+                  Total: ₹{total.toFixed(2)}
                 </span>
                 <span className="text-sm sm:text-base font-semibold">
                   Proceed to Pay
@@ -203,6 +282,7 @@ const CartPage = () => {
               <button
                 onClick={handleProceed}
                 className="w-full flex items-center justify-between bg-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow hover:bg-indigo-700 transition-colors duration-200"
+                aria-label="Proceed to payment"
               >
                 <span className="text-base sm:text-lg font-semibold">
                   ₹{total.toFixed(2)}

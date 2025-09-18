@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import RegisterUser from "../../backend/authentication/register";
@@ -23,8 +24,8 @@ const OtpVerification = ({ onClose, onVerify }) => {
   const phone = localStorage.getItem("userPhone");
   const { width } = useWindowSize();
   const isMobile = width < 640;
+  const navigate = useNavigate();
 
-  // Prevent background scroll
   useEffect(() => {
     document.body.classList.add("overflow-hidden");
     return () => document.body.classList.remove("overflow-hidden");
@@ -101,7 +102,6 @@ const OtpVerification = ({ onClose, onVerify }) => {
 
   const isOtpComplete = otp.every((digit) => digit !== "");
 
-  // Verify
   const handleSubmit = async () => {
     if (!isOtpComplete) return;
     const code = otp.join("");
@@ -127,7 +127,15 @@ const OtpVerification = ({ onClose, onVerify }) => {
       localStorage.setItem("userPhone", phone);
 
       alert("✅ Login successful!");
-      onClose && onClose(); // close modal instead of reload
+
+      // 🔴 This line needs to be updated:
+      // navigate("/", { replace: true });
+
+      // ✅ Replace with:
+      window.location.href = "/";
+
+      // Close modal if using popup
+      onClose && onClose();
     } catch (error) {
       console.error("Error during verification:", error);
       alert("Something went wrong during verification.");

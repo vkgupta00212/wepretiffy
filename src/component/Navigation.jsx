@@ -198,7 +198,7 @@ const Navigation = () => {
                     <img
                       src={
                         user[0]?.Image
-                          ? `https://weprettify.com/images/${user[0].Image}`
+                          ? `https://api.weprettify.com/images/${user[0].Image}`
                           : "https://via.placeholder.com/150?text=Avatar"
                       }
                       alt={user[0]?.Fullname || "Profile"}
@@ -238,6 +238,12 @@ const Navigation = () => {
                         <span className="font-semibold text-indigo-600">
                           ₹{wallet[0]?.WalletBalance || 0}
                         </span>
+                      </Link>
+                      <Link
+                        to="/cartpage"
+                        className="flex justify-between block px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-gray-700 first:rounded-t-xl"
+                      >
+                        <span>Contact</span>
                       </Link>
                       <button
                         onClick={handleLogout}

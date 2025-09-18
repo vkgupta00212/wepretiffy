@@ -89,7 +89,7 @@ const PaymentCard2 = () => {
               {item.duration && (
                 <p className="text-xs text-gray-600 mt-1">{item.duration}</p>
               )}
-              <button
+              {/* <button
                 onClick={() => handleRemove(item.ID)}
                 disabled={deletingItemId === item.ID}
                 className="mt-2 text-red-600 text-xs hover:text-red-800 disabled:opacity-50 flex items-center gap-1"
@@ -100,34 +100,14 @@ const PaymentCard2 = () => {
                   <Trash2 size={12} />
                 )}
                 {deletingItemId === item.ID ? "Removing..." : "Remove"}
-              </button>
+              </button> */}
             </div>
 
             <div className="flex flex-col items-end">
               <div className="flex items-center border border-indigo-200 bg-indigo-50 rounded-full px-2 py-1 gap-2 text-xs font-medium hover:border-indigo-300 transition-all">
-                <button
-                  onClick={() =>
-                    handleUpdateQuantity(
-                      item.ID,
-                      Math.max(1, Number(item.Quantity) - 1)
-                    )
-                  }
-                  disabled={Number(item.Quantity) <= 1}
-                  className="p-1 hover:bg-indigo-100 rounded-full transition-colors"
-                >
-                  <Minus size={12} />
-                </button>
                 <span className="w-5 text-center font-semibold">
                   {item.Quantity}
                 </span>
-                <button
-                  onClick={() =>
-                    handleUpdateQuantity(item.ID, Number(item.Quantity) + 1)
-                  }
-                  className="p-1 hover:bg-indigo-100 rounded-full transition-colors"
-                >
-                  <Plus size={12} />
-                </button>
               </div>
               <p className="text-sm font-bold mt-2 text-gray-900">
                 ₹{Number(item.Price) * Number(item.Quantity)}
