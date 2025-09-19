@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import LoginCard from "./loginCard.jsx";
 import OtpVerification from "./otpverification.jsx";
 import RegisterUser from "../../backend/authentication/register.js";
+import MyOrder from "./myorders.jsx";
 
 const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({ width: undefined });
@@ -298,7 +299,7 @@ const UserProfile = () => {
     { id: 2, title: "Saved Addresses", Component: <AddressDetails /> },
     { id: 3, title: "Refer & Earn", Component: <ReferAndEarn /> },
     { id: 4, title: "Enter Referral Code", Component: <EnterReferCode /> },
-    { id: 5, title: "My Orders", Component: <AddressDetails /> },
+    { id: 5, title: "My Orders", Component: <MyOrder /> },
     { id: 6, title: "About Us", Component: <AboutUs /> },
     { id: 7, title: "Terms & Conditions", Component: <TermsPage /> },
     { id: 8, title: "Privacy Policy", Component: <PrivacyAndPolicy /> },

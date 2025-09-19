@@ -240,7 +240,7 @@ const Navigation = () => {
                         </span>
                       </Link>
                       <Link
-                        to="/cartpage"
+                        to="/contact"
                         className="flex justify-between block px-5 py-3 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-200 text-gray-700 first:rounded-t-xl"
                       >
                         <span>Contact</span>

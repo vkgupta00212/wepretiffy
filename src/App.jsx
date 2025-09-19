@@ -21,6 +21,7 @@ import TransactionHistory from "./component/ui/transactions";
 import ProductScreen from "./component/ui/products";
 import ProductMainPage from "./component/ui/productmainpage";
 import CartPage from "./component/ui/cartmainpage";
+import ContactInfo from "./component/ui/contact";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,7 @@ const App = () => {
               <Route path="/productscreen" element={<ProductScreen />} />
               <Route path="/productmainpage" element={<ProductMainPage />} />
               <Route path="/cartpage" element={<CartPage />} />
+              <Route path="/contact" element={<ContactInfo />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
