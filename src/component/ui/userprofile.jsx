@@ -573,7 +573,7 @@ const UserProfile = () => {
           initial="hidden"
           animate="visible"
           transition={{ duration: 0.5 }}
-          className="flex flex-col items-center mb-10 mt-16"
+          className="flex flex-col items-center mb-10 pt-7"
         >
           <motion.div
             className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg cursor-pointer group"

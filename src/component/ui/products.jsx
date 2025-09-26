@@ -153,7 +153,7 @@ const ProductScreen = () => {
                 <FiSearch className="text-gray-400 mr-3" size={20} />
                 <input
                   type="text"
-                  placeholder="Search for ‘kids saloon’"
+                  placeholder="Search for ‘salon’"
                   className="flex-grow outline-none text-gray-600 placeholder-gray-400 bg-transparent"
                 />
               </div>
