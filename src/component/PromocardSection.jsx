@@ -73,11 +73,11 @@ const PromocardSection = () => {
   return (
     <section
       id="services"
-      className="py-16 bg-gradient-to-b from-white to-gray-50"
+      className="py-5 bg-gradient-to-b from-white to-gray-50"
     >
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto p-1">
         {/* Section Header */}
-        <div className="mb-10">
+        <div className="mb-3">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">
             Explore Popular Services
           </h2>

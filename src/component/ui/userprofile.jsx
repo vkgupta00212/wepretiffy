@@ -487,61 +487,85 @@ const UserProfile = () => {
           initial="hidden"
           animate="visible"
           transition={{ duration: 0.5 }}
-          className="mb-8 flex items-center justify-between"
+          className="mb-8 flex items-center justify-between "
         >
-          <div>
-            <h1 className="text-[18px] sm:text-3xl font-normal text-gray-900 tracking-tight">
-              My Profile
-            </h1>
-            <div className="w-20 h-1 bg-blue-500 rounded-full mt-2" />
-          </div>
-          {isMobile && (
-            <div className="relative" ref={menuRef}>
+          <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10 border-b border-gray-200">
+            <div className="flex items-center justify-start px-4 py-3 sm:px-6">
               <motion.button
-                onClick={() => setShowMenu(!showMenu)}
-                className="p-2 rounded-full hover:bg-gray-200 transition-colors"
                 whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label="Toggle profile menu"
+                whileTap={{ scale: 0.9 }}
+                onClick={() => navigate(-1)}
+                className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                aria-label="Go back"
               >
-                <FaEllipsisV className="text-gray-600 text-lg" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-gray-600 hover:text-gray-800"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
               </motion.button>
-              <AnimatePresence>
-                {showMenu && (
-                  <motion.div
-                    variants={menuVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+              <div className="flex flex-row flex-2 items-center justify-between">
+                <h2 className="text-xl sm:text-3xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  My Profile
+                </h2>
+
+                <div className="relative" ref={menuRef}>
+                  <motion.button
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label="Toggle profile menu"
                   >
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                      aria-label="Log out"
-                    >
-                      Logout
-                    </button>
-                    <button
-                      onClick={() => setShowMenu(false)}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                      aria-label="Settings"
-                    >
-                      Settings
-                    </button>
-                    <button
-                      onClick={() => setShowMenu(false)}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                      aria-label="Help"
-                    >
-                      Help
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    <FaEllipsisV className="text-gray-600 text-lg" />
+                  </motion.button>
+                  <AnimatePresence>
+                    {showMenu && (
+                      <motion.div
+                        variants={menuVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        transition={{ duration: 0.2 }}
+                        className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                      >
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          aria-label="Log out"
+                        >
+                          Logout
+                        </button>
+                        <button
+                          onClick={() => setShowMenu(false)}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          aria-label="Settings"
+                        >
+                          Settings
+                        </button>
+                        <button
+                          onClick={() => setShowMenu(false)}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                          aria-label="Help"
+                        >
+                          Help
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
             </div>
-          )}
+          </div>
         </motion.div>
 
         <motion.div
@@ -549,7 +573,7 @@ const UserProfile = () => {
           initial="hidden"
           animate="visible"
           transition={{ duration: 0.5 }}
-          className="flex flex-col items-center mb-10"
+          className="flex flex-col items-center mb-10 mt-16"
         >
           <motion.div
             className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg cursor-pointer group"

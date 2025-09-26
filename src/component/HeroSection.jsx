@@ -34,7 +34,7 @@ const HeroSection = () => {
         {/* Hero Main Section */}
         <section
           id="home"
-          className="flex flex-col lg:flex-row items-center justify-between w-full px- lg:px-28 py-4 lg:py-24"
+          className="flex flex-col lg:flex-row items-center justify-between w-full lg:px-20 py-4 lg:py-24"
         >
           {/* Left */}
           <div className="w-full lg:w-[95%] flex flex-col items-center lg:items-start text-center lg:text-left gap-1 ">
@@ -43,8 +43,8 @@ const HeroSection = () => {
           </div>
 
           {/* Right Image */}
-          <div className="w-full lg:w-[95%] flex justify-center mt-5 lg:mt-0">
-            <div className="w-[90vw] lg:w-full max-w-[540px]">
+          <div className="w-full lg:w-[95%] flex justify-center mt-2 lg:mt-0">
+            <div className="w-[97vw] lg:w-full max-w-[540px]">
               <MainImage />
             </div>
           </div>

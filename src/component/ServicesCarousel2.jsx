@@ -95,10 +95,10 @@ const ServicesCarousel2 = () => {
   );
 
   return (
-    <section id="services" className="py-5 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="services" className="py-2 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <h2 className="text-3xl sm:text-4xl font-semibold text-gray-900 mb-8 text-center md:text-left">
+        <h2 className="text-3xl  sm:text-4xl font-bold text-gray-900 mb-3 text-Start md:text-left">
           Women Services
         </h2>
 

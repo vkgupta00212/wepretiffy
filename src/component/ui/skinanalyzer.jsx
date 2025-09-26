@@ -162,7 +162,6 @@ const SkinAnalyzer = () => {
     );
   }
 
-  // Camera Preview and Auto-Analysis
   if (step === "camera") {
     return (
       <AnimatePresence>

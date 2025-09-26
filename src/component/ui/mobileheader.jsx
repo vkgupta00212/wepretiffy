@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import GetOrder from "../../backend/order/getorderid";
+import { FiSearch } from "react-icons/fi";
 
 const CartWithBadge = ({ count }) => (
   <div
@@ -122,33 +123,18 @@ const MobileHeader = () => {
   };
 
   return (
-    <header className="w-full rounded-[10px] border-b border-gray-300 flex items-center justify-between px-4 py-3 bg-inherit sm:px-6 sm:py-4 sticky top-0 z-50">
+    <header className="w-full rounded-[10px] border-b border-gray-300 flex justify-between py-2 px-2 bg-inherit sm:px-6 sm:py-4 sticky top-0 z-50">
       {/* Left Section - Home and Address */}
-      <div className="flex flex-col flex-1 min-w-0">
-        <h1 className="text-base font-semibold text-gray-900 sm:text-lg text-left">
-          Home
-        </h1>
-        <div
-          className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-800 mt-0.5 max-w-[85%] sm:max-w-[90%] focus:outline-none focus:ring-2 focus:ring-blue-500"
-          title="546, Block 2, Kirti Nagar Industrial Area, Kirti Nagar, New Delhi, Delhi, India"
-          aria-label="Change delivery address"
-        >
-          <span className="truncate font-medium">
-            546, Block 2, Kirti Nagar Industrial Area, Kirti Nagar, New Delhi,
-            Delhi, India
-          </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-3 h-3 flex-shrink-0 text-gray-500 hover:text-gray-700 transition-colors"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            viewBox="0 0 24 24"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
+      <div className="flex flex-col mx-auto">
+        <div className="w-[300px] mx-auto p-[1px]">
+          <div className="flex items-center border border-gray-300 rounded-[10px] px-1 py-2 bg-white">
+            <FiSearch className="text-gray-400 mr-3" size={20} />
+            <input
+              type="text"
+              placeholder="Search for ‘kids saloon’"
+              className="flex-grow outline-none text-gray-600 placeholder-gray-400 bg-transparent"
+            />
+          </div>
         </div>
       </div>
 

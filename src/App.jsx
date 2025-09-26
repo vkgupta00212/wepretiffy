@@ -54,13 +54,7 @@ const Layout = ({ children }) => {
       )}
 
       {/* Main Content */}
-      <main
-        className={`flex-grow px-4 sm:px-6 lg:px-8 
-          ${!isMobile ? "pt-20" : "pt-6"} 
-          ${isHomePage && isMobile ? "pb-20" : "pb-6"}`}
-      >
-        {children}
-      </main>
+      <main>{children}</main>
 
       {/* Mobile Navbar (only on home) */}
       {isMobile && isHomePage && (

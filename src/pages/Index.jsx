@@ -35,7 +35,7 @@ const Index = () => {
 
       {/* Services Section */}
       <section
-        className="py-12 sm:py-16 bg-gray-50"
+        className="py-1 sm:py-16 bg-gray-50"
         aria-labelledby="services-heading"
       >
         <div className="">
@@ -49,20 +49,10 @@ const Index = () => {
       </section>
       {/* Become WePretiffy Vendor Section */}
       <section
-        className="py-12 sm:py-16 bg-pink-50"
+        className="py-1 sm:py-16 bg-pink-50"
         aria-labelledby="vendor-heading"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2
-            id="vendor-heading"
-            className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6"
-          >
-            Become a WePretiffy Vendor
-          </h2>
-          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-10 text-sm sm:text-base">
-            Join our growing community and offer your services to a wider
-            audience. Fill in your details below and let's get started.
-          </p>
+        <div className="max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
           <Suspense
             fallback={
               <div className="w-full h-64 bg-gray-200 rounded-lg animate-pulse" />

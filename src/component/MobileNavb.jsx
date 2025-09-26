@@ -4,6 +4,7 @@ import SkinAnalyzer from "./ui/skinanalyzer";
 import Services from "../pages/Index";
 import ProductScreen from "./ui/products";
 import UserProfile from "./ui/userprofile";
+import skin from "../assets/skinanalyze.jpg";
 
 const navItems = [
   {
@@ -18,11 +19,7 @@ const navItems = [
   },
   {
     label: "Skin Analyzer",
-    icon: (
-      <span className="text-[20px] transition-all duration-300 group-hover:scale-110">
-        💄
-      </span>
-    ),
+    icon: <img src={skin} className="h-10" />,
     component: <SkinAnalyzer />,
     notification: false,
   },
@@ -57,7 +54,7 @@ const MobileNavbar = () => {
   return (
     <div className="relative min-h-screen flex flex-col">
       <div
-        className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-gray-100 p-4 pb-20"
+        className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-50 to-gray-100 p-1 pb-20"
         style={{ maxHeight: "calc(100vh - 80px)" }}
       >
         {navItems[activeTab].component}

@@ -6,6 +6,7 @@ import spaImage from "../../assets/facialimg.png";
 import GetProduct from "../../backend/getproduct/getproduct";
 import GetProductImage from "../../backend/getproduct/getproductimage";
 import { AlertCircle, ShoppingCart } from "lucide-react";
+import { FiSearch } from "react-icons/fi";
 import SearchCard from "./searchcard";
 
 const ProductScreen = () => {
@@ -73,7 +74,6 @@ const ProductScreen = () => {
     }
   }, [searchTerm, services]);
 
-  // Handle service click
   const handleServiceClick = (service) => {
     navigate("/productmainpage", { state: { subService: service } });
   };
@@ -106,29 +106,58 @@ const ProductScreen = () => {
   return (
     <section
       id="services"
-      className="py-12 bg-gradient-to-b from-blue-50 to-gray-50"
+      className="py-12 md:mt-6 bg-gradient-to-b from-blue-50 to-gray-50"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
         {/* Header + Search Card */}
+        <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10 border-b border-gray-200">
+          <div className="flex items-center justify-start p-3 sm:px-6">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Go back"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6 text-gray-600 hover:text-gray-800"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </motion.button>
+            <h2 className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Products
+            </h2>
+          </div>
+        </div>
+
         <motion.div
           variants={headerVariants}
           initial="hidden"
           animate="visible"
           transition={{ duration: 0.5 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4"
+          className="flex flex-row md:flex-row md:items-center justify-between mt-5 mb-2 gap-3"
         >
-          <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-[30px] font-semibold text-gray-900 tracking-tight">
-              Explore Our Products
-            </h2>
-            <div className="w-20 h-1 bg-indigo-600 rounded-full mt-2" />
-          </div>
           <div className="w-full md:w-1/3">
-            <SearchCard
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              aria-label="Search products"
-            />
+            <div className="w-[320px] md:w-[500px] mx-auto p-[3px]">
+              <div className="flex items-center border border-gray-300 rounded-[5px] px-4 py-2 bg-white">
+                <FiSearch className="text-gray-400 mr-3" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search for ‘kids saloon’"
+                  className="flex-grow outline-none text-gray-600 placeholder-gray-400 bg-transparent"
+                />
+              </div>
+            </div>
           </div>
           <motion.div
             className="w-full md:w-auto flex items-center gap-2 text-gray-800 hover:text-indigo-600 cursor-pointer transition-colors duration-200"
@@ -137,8 +166,12 @@ const ProductScreen = () => {
             whileTap={{ scale: 0.95 }}
             aria-label="View cart"
           >
-            <ShoppingCart className="w-6 h-6" />
-            <span className="font-medium">Cart</span>
+            <div className="flex flex-col items-center">
+              <div className="items-center gap-1 border border-gray-500 p-2 rounded-full">
+                <ShoppingCart className="w-4 h-4" />
+              </div>
+              <span className="font-normal text-[9px]">Cart</span>
+            </div>
           </motion.div>
         </motion.div>
 
@@ -156,7 +189,7 @@ const ProductScreen = () => {
         )}
 
         {/* Grid Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
           {isLoading ? (
             Array(5)
               .fill()

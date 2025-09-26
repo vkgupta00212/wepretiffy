@@ -11,7 +11,7 @@ const WomensCard = ({ icon, label, onClick }) => {
       className="group flex flex-col items-center space-y-2 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 rounded-xl"
       aria-label={`Select ${label} service`}
     >
-      <Card className="w-[90px] h-[90px] sm:w-[140px] sm:h-[140px] md:w-[90px] md:h-[90px] lg:w-[90px] lg:h-[90px] rounded-xl overflow-hidden border border-gray-100 bg-white shadow-md hover:shadow-xl transition-all duration-300 group-hover:ring-2 group-hover:ring-indigo-200">
+      <Card className="w-[110px] h-[100px] sm:w-[140px] sm:h-[140px] md:w-[90px] md:h-[90px] lg:w-[90px] lg:h-[90px] rounded-xl overflow-hidden border border-gray-100 bg-white shadow-md hover:shadow-xl transition-all duration-300 group-hover:ring-2 group-hover:ring-indigo-200">
         <CardContent className="p-0 flex items-center justify-center w-full h-full">
           <img
             src={icon}
@@ -53,7 +53,7 @@ const WomensSalonCard = ({ onClose, service }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 sm:p-6 w-full h-[400px] max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl relative shadow-xl z-50 transition-all duration-300 animate-in fade-in slide-in-from-bottom-10">
+    <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 sm:p-6 w-[385px] md:w-full h-[400px] md:max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl relative shadow-xl z-50 transition-all duration-300 animate-in fade-in slide-in-from-bottom-10">
       {/* Close Button */}
       <button
         className="absolute top-3 right-3 text-gray-400 hover:text-gray-800 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100"
@@ -64,7 +64,7 @@ const WomensSalonCard = ({ onClose, service }) => {
       </button>
 
       {/* Title */}
-      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-center text-gray-900 tracking-tight">
+      <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-start text-gray-900 tracking-tight">
         {service?.ServiceName || "Invalid Service Name"}
       </h2>
 
@@ -79,7 +79,7 @@ const WomensSalonCard = ({ onClose, service }) => {
       ) : (
         /* Sub-services Grid */
         <div className="h-[calc(100%-4rem)] sm:h-[calc(100%-5rem)] overflow-y-auto hide-scrollbar p-2 sm:p-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-3 sm:gap-4">
             {subServices.map((subService) => (
               <WomensCard
                 key={subService.id}
