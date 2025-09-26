@@ -24,7 +24,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative bg-white overflow-hidden">
+    <div className="min-h-[100dvh] pt-safe-top pb-safe-bottom bg-white relative bg-white overflow-hidden">
       {/* Blurred Background on Modal */}
       <div
         className={`${

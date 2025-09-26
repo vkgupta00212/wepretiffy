@@ -2,13 +2,9 @@
 const animatePlugin = require("tailwindcss-animate");
 const scrollbarHide = require("tailwind-scrollbar-hide");
 
-
 module.exports = {
   darkMode: "class",
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     container: {
       center: true,
@@ -124,7 +120,12 @@ module.exports = {
         glow: "glow 2s ease-in-out infinite",
         "scale-gentle": "scale-gentle 0.3s ease-out",
       },
+      // ✅ Add safe-area spacing utilities
+      spacing: {
+        "safe-top": "var(--safe-top)",
+        "safe-bottom": "var(--safe-bottom)",
+      },
     },
   },
-  plugins: [animatePlugin,  require("tailwind-scrollbar-hide")],
+  plugins: [animatePlugin, scrollbarHide],
 };
