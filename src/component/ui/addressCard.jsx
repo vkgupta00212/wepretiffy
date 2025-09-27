@@ -17,11 +17,12 @@ const AddressFormCard = ({ onClose, onSelectAddress }) => {
   const [showForm, setShowForm] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const phone = localStorage.getItem("userPhone");
 
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const fetchedAddresses = await GetAddress("7700818001");
+        const fetchedAddresses = await GetAddress(phone);
         setAddresses(fetchedAddresses || []);
       } catch (error) {
         console.error("Error fetching addresses:", error);
