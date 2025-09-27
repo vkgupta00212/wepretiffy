@@ -140,7 +140,7 @@ const ProductScreen = () => {
           </div>
         </div>
 
-        <div className="pt-[30px]">
+        <div className="pt-[60px]">
           <motion.div
             variants={headerVariants}
             initial="hidden"
