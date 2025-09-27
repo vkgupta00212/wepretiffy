@@ -146,7 +146,7 @@ const ProductScreen = () => {
             className="flex flex-row md:flex-row md:items-center justify-between mb-2 gap-3"
           >
             <div className="w-full md:w-1/3">
-              <div className="w-[335px] md:w-[500px] mx-auto p-[3px]">
+              <div className="w-[360px] md:w-[500px] mx-auto p-[10px]">
                 <div className="flex items-center border border-gray-300 rounded-[5px] px-4 py-2 bg-white">
                   <FiSearch className="text-gray-400 mr-3" size={20} />
                   <input
@@ -174,7 +174,7 @@ const ProductScreen = () => {
           </motion.div>
         </div>
 
-        <div className="pt-[70px]">
+        <div className="pt-[100px]">
           {/* Error Message */}
           {error && (
             <motion.div
