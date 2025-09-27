@@ -1,114 +1,159 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent } from "./card";
-import { useNavigate } from "react-router-dom";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
+import { Card, CardContent } from "./card";
+import { ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import spaImage from "../../assets/facialimg.png";
-import { AlertCircle } from "lucide-react";
 import GetSuggestProduct from "../../backend/getproduct/suggestedproducts";
 
 const SuggestProductScreen = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [maxSlide, setMaxSlide] = useState(0);
   const [services, setServices] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [loaded, setLoaded] = useState(false);
+
   const navigate = useNavigate();
 
-  // Keen Slider setup
   const [sliderRef, instanceRef] = useKeenSlider({
-    loop: true,
-    slides: { perView: 4, spacing: 16 },
+    slides: { perView: 5, spacing: 16 },
+    drag: true,
+    friction: 0.2,
+    duration: 600,
     breakpoints: {
-      "(max-width: 1280px)": { slides: { perView: 3, spacing: 12 } },
+      "(max-width: 1280px)": { slides: { perView: 4, spacing: 12 } },
+      "(max-width: 1024px)": { slides: { perView: 3, spacing: 12 } },
       "(max-width: 768px)": { slides: { perView: 2, spacing: 10 } },
-      "(max-width: 480px)": { slides: { perView: 1, spacing: 8 } },
+      "(max-width: 500px)": { slides: { perView: 1, spacing: 8 } },
     },
-    slideChanged(slider) {
-      setCurrentSlide(slider.track.details.rel);
+    slideChanged(s) {
+      setCurrentSlide(s.track.details.rel);
     },
-    created() {
+    created(s) {
       setLoaded(true);
+      updateMaxSlide(s);
+    },
+    updated(s) {
+      updateMaxSlide(s);
     },
   });
 
-  // Autoplay
-  useEffect(() => {
-    if (!instanceRef.current || isLoading) return;
-    const autoplay = setInterval(() => instanceRef.current?.next(), 4000);
-    return () => clearInterval(autoplay);
-  }, [instanceRef, isLoading]);
+  const updateMaxSlide = (s) => {
+    const totalSlides = s.track.details.slides.length;
+    const perView =
+      typeof s.options.slides === "object" && s.options.slides?.perView
+        ? s.options.slides.perView
+        : 1;
+    setMaxSlide(Math.max(0, totalSlides - perView));
+  };
 
-  // Fetch products
   useEffect(() => {
-    const fetchProducts = async () => {
+    if (loaded && instanceRef.current && services.length > 0) {
+      instanceRef.current.update();
+    }
+  }, [services, loaded, instanceRef]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
       try {
         setIsLoading(true);
         const data = await GetSuggestProduct();
-        setServices(Array.isArray(data) ? data : []);
+        console.log("Fetched suggested products:", data);
+        setServices(data || []);
         setError(null);
       } catch (err) {
-        setError(err.message || "Failed to load products");
+        setError(err.message || "Failed to load services");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchProducts();
+    fetchServices();
   }, []);
 
+  const handlePrev = () => instanceRef.current?.prev();
+  const handleNext = () => instanceRef.current?.next();
+
   const handleServiceClick = (service) => {
-    navigate("/productmainpage", { state: { subService: service } });
+    navigate("/womensaloonIn", { state: { subService: service } });
   };
 
+  const imageBaseUrl = "https://api.weprettify.com/Images/";
+
   const SkeletonCard = () => (
-    <Card className="flex flex-col h-[360px] sm:h-[400px] rounded-xl shadow-lg border animate-pulse">
-      <CardContent className="p-0 flex-grow">
-        <div className="h-[180px] sm:h-[200px] bg-gray-200 rounded-t-xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-shimmer"></div>
+    <div className="keen-slider__slide px-2">
+      <Card className="flex flex-col h-[330px] rounded-xl shadow-md border border-gray-100 animate-pulse bg-white">
+        <CardContent className="p-0 flex-grow">
+          <div className="h-[220px] bg-gray-200 rounded-t-xl"></div>
+        </CardContent>
+        <div className="px-4 py-4">
+          <div className="h-5 bg-gray-200 rounded w-4/5 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
         </div>
-      </CardContent>
-      <div className="mt-3 px-3 sm:px-4 py-4">
-        <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
 
   return (
-    <section className="py-8 sm:py-12 bg-gradient-to-b from-gray-50 to-gray-100">
-      <div className="max-w-full sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="services"
+      className="py-6 bg-gradient-to-b from-gray-50 to-white"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Error Message */}
         {error && (
-          <div className="flex items-center justify-center text-red-600 mb-6">
-            <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
-            <p className="text-sm sm:text-base">{error}</p>
+          <div className="flex items-center justify-center mb-6 text-red-600 bg-red-50 p-4 rounded-xl shadow-sm">
+            <AlertCircle className="mr-2" size={20} />
+            <span className="text-sm font-medium">{error}</span>
           </div>
         )}
-        <div className="relative">
-          {isLoading ? (
-            <div className="keen-slider" ref={sliderRef}>
-              {Array(5)
+
+        {/* Slider Container */}
+        <div className="relative min-h-[320px] w-full">
+          {/* Arrow Buttons */}
+          {loaded && services.length > 0 && currentSlide > 0 && (
+            <button
+              onClick={handlePrev}
+              className="absolute left-[-12px] sm:left-[-20px] md:left-[-24px] lg:left-[-28px] top-1/2 z-20 transform -translate-y-1/2 bg-white text-gray-700 p-3 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-200"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft size={24} />
+            </button>
+          )}
+          {loaded && services.length > 0 && currentSlide < maxSlide && (
+            <button
+              onClick={handleNext}
+              className="absolute right-[-12px] sm:right-[-20px] md:right-[-24px] lg:right-[-28px] top-1/2 z-20 transform -translate-y-1/2 bg-white text-gray-700 p-3 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-200"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={24} />
+            </button>
+          )}
+
+          {/* Keen Slider */}
+          <div ref={sliderRef} className="keen-slider">
+            {isLoading ? (
+              Array(5)
                 .fill()
-                .map((_, index) => (
-                  <div key={index} className="keen-slider__slide">
-                    <SkeletonCard />
-                  </div>
-                ))}
-            </div>
-          ) : services.length > 0 ? (
-            <>
-              <div ref={sliderRef} className="keen-slider">
-                {services.map((service) => (
-                  <div key={service.ProID} className="keen-slider__slide">
-                    <Card
-                      className="flex flex-col cursor-pointer h-[360px] sm:h-[400px] rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-indigo-300 transition-all duration-300"
-                      onClick={() => handleServiceClick(service)}
-                    >
+                .map((_, index) => <SkeletonCard key={index} />)
+            ) : services.length > 0 ? (
+              services.map((service) => (
+                <div key={service.id} className="keen-slider__slide px-[1px]">
+                  <div
+                    className="m-0"
+                    onClick={() => handleServiceClick(service)}
+                  >
+                    <Card className="flex flex-col cursor-pointer h-[340px] rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 bg-white hover:border-gray-200">
                       <CardContent className="p-0 flex-grow">
-                        <div className="h-[180px] sm:h-[200px] overflow-hidden rounded-t-xl">
+                        <div className="h-[220px] overflow-hidden rounded-t-xl">
                           <img
-                            src={service.imageUrl || spaImage}
-                            alt={service.ProductName || "Product"}
+                            src={
+                              service.image
+                                ? `${imageBaseUrl}${service.image}`
+                                : spaImage
+                            }
+                            alt={service.ProductName}
                             className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                             loading="lazy"
                             onError={(e) => {
@@ -117,88 +162,29 @@ const SuggestProductScreen = () => {
                           />
                         </div>
                       </CardContent>
-                      <div className="px-3 sm:px-4 py-4 flex flex-col flex-grow">
-                        <span className="text-base sm:text-lg font-semibold text-gray-900 truncate block leading-tight mb-2">
-                          {service.ProductName || "Unnamed Product"}
+                      <div className="px-4 py-4">
+                        <span className="text-lg font-semibold text-gray-800 truncate block">
+                          {service.ProductName}
                         </span>
-                        <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-3">
-                          {service.ProductDes || "No description available."}
-                        </p>
-                        <span className="text-sm sm:text-base font-medium text-gray-900 mt-auto">
-                          ₹{Number(service.Price || 0).toFixed(2)}
+                        <span className="text-md font-medium text-gray-600 truncate block">
+                          ₹{service.Price}
+                        </span>
+                        <span className="text-sm font-normal text-gray-500 truncate block">
+                          {service.ProductDes}
                         </span>
                       </div>
                     </Card>
                   </div>
-                ))}
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-500 py-12">
+                <p className="text-lg font-medium">
+                  No services available at the moment.
+                </p>
               </div>
-
-              {loaded && instanceRef.current && services.length > 1 && (
-                <>
-                  <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-4 sm:px-6">
-                    <button
-                      onClick={() => instanceRef.current?.prev()}
-                      className="p-2 sm:p-3 bg-black text-white rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all duration-200"
-                      aria-label="Previous slide"
-                    >
-                      <svg
-                        className="w-5 h-5 sm:w-6 sm:h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M15 19l-7-7 7-7"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => instanceRef.current?.next()}
-                      className="p-2 sm:p-3 bg-black text-white rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all duration-200"
-                      aria-label="Next slide"
-                    >
-                      <svg
-                        className="w-5 h-5 sm:w-6 sm:h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="absolute bottom-[-2rem] sm:bottom-[-2.5rem] left-0 right-0 flex justify-center space-x-2">
-                    {services.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => instanceRef.current?.moveToIdx(index)}
-                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
-                          currentSlide === index
-                            ? "bg-indigo-600 scale-125"
-                            : "bg-gray-300 hover:bg-gray-400 hover:scale-110"
-                        }`}
-                        aria-label={`Go to slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-            </>
-          ) : (
-            <div className="text-center text-gray-600 py-10 sm:py-12">
-              <p className="text-base sm:text-xl font-medium">
-                No products available at this time.
-              </p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </section>
