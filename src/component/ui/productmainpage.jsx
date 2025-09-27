@@ -356,8 +356,9 @@ const ProductMainPage = () => {
           </h2>
         </div>
       </div>
+      <div className="pt-[30px]"></div>
       <div className="max-w-6xl md:mt-[50px] mx-auto flex flex-col md:flex-row gap-8 bg-white shadow-xl border border-gray-200 rounded-2xl overflow-hidden">
-        <div className="md:w-1/2 w-full h-[400px] bg-gray-100 rounded-2xl overflow-hidden relative">
+        <div className="md:w-1/2 w-full h-[250px] p-[1px] bg-gray-100 rounded-[10px] overflow-hidden relative">
           {isLoading ? (
             <div className="flex items-center justify-center w-full h-full">
               <p className="text-gray-600">Loading images...</p>
@@ -427,22 +428,22 @@ const ProductMainPage = () => {
             />
           )}
         </div>
-        <div className="md:w-1/2 w-full p-6 flex flex-col justify-between">
+        <div className="md:w-1/2 w-full p-[10px] flex flex-col justify-between">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               {product.ProductName}
             </h2>
-            <p className="text-gray-600 mt-4 text-sm md:text-base leading-relaxed">
+            <p className="text-gray-600 mt-[1px] text-sm md:text-base leading-relaxed">
               {product.ProductDes}
             </p>
           </div>
-          <div className="mt-6">
+          <div className="mt-[2px]">
             <p className="text-xl md:text-2xl font-semibold text-gray-900">
               ₹{Number(product.Price).toFixed(2)}
             </p>
             <button
               onClick={() => addToCart(product)}
-              className="w-full mt-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300"
+              className="w-full mt-[10px] py-[11px] bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300"
               aria-label="Add to cart"
             >
               Add to Cart
@@ -450,10 +451,10 @@ const ProductMainPage = () => {
           </div>
         </div>
       </div>
-      <div className="p-1 mt-8">
+      <div className="p-1 mt-[7px]">
         <RatingScreen reviews={reviews} />
       </div>
-      <div className="p-1 mt-8">
+      <div className="p-1 mt-[7px]">
         <SuggestProductScreen />
       </div>
       <AnimatePresence>

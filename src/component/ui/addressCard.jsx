@@ -53,7 +53,7 @@ const AddressFormCard = ({ onClose, onSelectAddress }) => {
     try {
       const response = await InsertAddress(
         formData.name,
-        "7700818001",
+        phone,
         formData.address,
         formData.city,
         formData.pincode
