@@ -22,6 +22,7 @@ import ProductScreen from "./component/ui/products";
 import ProductMainPage from "./component/ui/productmainpage";
 import CartPage from "./component/ui/cartmainpage";
 import ContactInfo from "./component/ui/contact";
+import ScrollToTop from "./component/context/scrolltop";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +77,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <HashRouter>
+          <ScrollToTop />
           <Layout>
             <Routes>
               <Route path="/" element={<Index />} />

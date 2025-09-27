@@ -65,7 +65,7 @@ const SelectServiceCardSection = ({
   }, [subService, selectedSubService, onChangeSubService]);
 
   return (
-    <div className="w-full sm:w-[350px] md:w-[300px] lg:w-[280px] mx-auto sm:mx-0 bg-white rounded-xl shadow-lg p-4 sm:p-6 transition-all duration-300">
+    <div className="w-full sm:w-[350px] md:w-[300px] lg:w-[280px] mx-auto sm:mx-0 bg-white rounded-xl shadow-lg p-3 sm:p-6 transition-all duration-300">
       <h1 className="text-[22px] md:text-[26px] lg:text-[28px] font-bold mb-2 text-gray-900 tracking-tight">
         {subService?.text || "Salon Luxe"}
       </h1>

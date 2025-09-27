@@ -482,7 +482,7 @@ const UserProfile = () => {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-50 p-4 sm:p-6 md:p-8 lg:p-12">
       <div className="max-w-4xl mx-auto">
         {/* HEADER */}
-        <motion.div
+        <div
           variants={headerVariants}
           initial="hidden"
           animate="visible"
@@ -491,7 +491,7 @@ const UserProfile = () => {
         >
           <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10 border-b border-gray-200">
             <div className="flex items-center justify-start px-4 py-3 sm:px-6">
-              <motion.button
+              {/* <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => navigate(-1)}
@@ -512,9 +512,9 @@ const UserProfile = () => {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-              </motion.button>
+              </motion.button> */}
               <div className="flex flex-row flex-2 items-center justify-between">
-                <h2 className="text-xl sm:text-3xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h2 className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                   My Profile
                 </h2>
 
@@ -566,7 +566,7 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         <motion.div
           variants={avatarVariants}

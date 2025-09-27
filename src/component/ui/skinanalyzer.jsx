@@ -98,11 +98,20 @@ const SkinAnalyzer = () => {
     }
   }, [step]);
 
+  const goBack = () => {
+    // Check if user can go back in history
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1); // go back in stack
+    } else {
+      navigate("/"); // fallback route
+    }
+  };
+
   // Get Started Page
   if (step === "getStarted") {
     return (
       <AnimatePresence>
-        <motion.div
+        <div
           variants={variants}
           initial="initial"
           animate="animate"
@@ -112,10 +121,10 @@ const SkinAnalyzer = () => {
           {/* Header with Back Button and Title */}
           <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10 border-b border-gray-200">
             <div className="flex items-center justify-start px-4 py-3 sm:px-6">
-              <motion.button
+              {/* <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={() => navigate(-1)}
+                onClick={goBack}
                 className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 aria-label="Go back"
               >
@@ -133,8 +142,8 @@ const SkinAnalyzer = () => {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-              </motion.button>
-              <h2 className="text-xl sm:text-3xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              </motion.button> */}
+              <h2 className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Skin Analyzer
               </h2>
             </div>
@@ -157,7 +166,7 @@ const SkinAnalyzer = () => {
               </motion.button>
             </div>
           </div>
-        </motion.div>
+        </div>
       </AnimatePresence>
     );
   }

@@ -224,8 +224,9 @@ const WomenSaloonIn = () => {
 
       await InsertOrder(orderPayload);
       console.log("InsertOrder API successful");
-
-      window.location.reload();
+      if (!isMobile) {
+        window.location.reload();
+      }
     } catch (err) {
       console.error("InsertOrder failed:", err);
     }
@@ -279,143 +280,111 @@ const WomenSaloonIn = () => {
   };
 
   return (
-    <div className="mt-[55px] px-4 md:px-6 lg:px-[120px] md:mt-[100px] lg:mt-[130px]">
-      <div className="flex flex-col md:flex-row lg:flex-row gap-4 lg:gap-6 h-full">
-        <div className="flex flex-col gap-4 flex-shrink-0">
-          <SelectServiceCardSection
-            subService={subService}
-            selectedSubService={selectedServiceTab}
-            onChangeSubService={(newTab) => setSelectedServiceTab(newTab)}
-          />
+    <div className="pt-[20px] px-1 md:px-6 lg:px-[120px] md:mt-[100px] lg:mt-[130px]">
+      <div className="relative flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 px-4 sm:px-6 pt-16">
+        {/* Header with Back Button and Title */}
+        <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10 border-b border-gray-200">
+          <div className="flex items-center justify-start px-4 py-3 sm:px-6">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Go back"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6 text-gray-600 hover:text-gray-800"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <h2 className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Packages
+            </h2>
+          </div>
+        </div>
 
-          {isMobile && (
-            <PackageMain
-              addToCart={addToCart}
-              selectedServiceTab={selectedServiceTab}
+        <div className="flex flex-col md:flex-row lg:flex-row gap-4 lg:gap-6 h-full">
+          <div className="flex flex-col gap-4 flex-shrink-0">
+            <SelectServiceCardSection
+              subService={subService}
+              selectedSubService={selectedServiceTab}
+              onChangeSubService={(newTab) => setSelectedServiceTab(newTab)}
             />
-          )}
 
-          {isTablet && (
-            <CartPage
-              cartItems={cartItems}
-              updateQuantity={updateQuantity}
-              removeFromCart={removeFromCart}
-              calculateTotal={calculateTotal}
-            />
+            {isMobile && (
+              <PackageMain
+                addToCart={addToCart}
+                selectedServiceTab={selectedServiceTab}
+              />
+            )}
+
+            {isTablet && (
+              <CartPage
+                cartItems={cartItems}
+                updateQuantity={updateQuantity}
+                removeFromCart={removeFromCart}
+                calculateTotal={calculateTotal}
+              />
+            )}
+          </div>
+
+          <div className="flex-grow max-h-[calc(100vh-200px)] overflow-y-auto hide-scrollbar px-[1px] sm:px-[1px]">
+            {!isMobile && (
+              <PackageMain
+                addToCart={addToCart}
+                selectedServiceTab={selectedServiceTab}
+              />
+            )}
+          </div>
+
+          {isLaptop && (
+            <div className="mt-[30px] lg:block flex-shrink-0">
+              <CartPage
+                cartItems={cartItems}
+                updateQuantity={updateQuantity}
+                removeFromCart={removeFromCart}
+                calculateTotal={calculateTotal}
+              />
+            </div>
           )}
         </div>
 
-        <div className="flex-grow max-h-[calc(100vh-200px)] overflow-y-auto hide-scrollbar px-[1px] sm:px-[1px]">
-          {!isMobile && (
-            <PackageMain
-              addToCart={addToCart}
-              selectedServiceTab={selectedServiceTab}
-            />
-          )}
-        </div>
-
-        {isLaptop && (
-          <div className="mt-[30px] lg:block flex-shrink-0">
-            <CartPage
-              cartItems={cartItems}
-              updateQuantity={updateQuantity}
-              removeFromCart={removeFromCart}
-              calculateTotal={calculateTotal}
-            />
+        {isMobile && (
+          <div className="fixed bottom-0 left-0 w-full z-50 block lg:hidden">
+            <CartSummary total={calculateTotal()} cartItems={cartItems} />
           </div>
         )}
-      </div>
 
-      {isMobile && (
-        <div className="fixed bottom-0 left-0 w-full z-50 block lg:hidden">
-          <CartSummary total={calculateTotal()} cartItems={cartItems} />
-        </div>
-      )}
-
-      <AnimatePresence>
-        {showLogin && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 pointer-events-auto"
-            ref={loginPromptRef}
-            aria-modal="true"
-            role="dialog"
-          >
-            {isMobile ? (
-              <motion.div
-                variants={bottomSheetVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="fixed bottom-0 left-0 right-0 w-full h-[50vh] bg-white rounded-t-2xl shadow-2xl p-6 max-w-md mx-auto pointer-events-auto"
-              >
-                <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
-                <button
-                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors p-2"
-                  onClick={() => setShowLogin(false)}
-                  aria-label="Close login prompt"
+        <AnimatePresence>
+          {showLogin && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 pointer-events-auto"
+              ref={loginPromptRef}
+              aria-modal="true"
+              role="dialog"
+            >
+              {isMobile ? (
+                <motion.div
+                  variants={bottomSheetVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="fixed bottom-0 left-0 right-0 w-full h-[50vh] bg-white rounded-t-2xl shadow-2xl p-6 max-w-md mx-auto pointer-events-auto"
                 >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-                <div className="flex flex-col items-center text-center">
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                    Login Required
-                  </h2>
-                  <p className="text-sm text-gray-600 mb-6">
-                    You need to log in to add items to your cart.
-                  </p>
-                  <div className="flex gap-4">
-                    <motion.button
-                      onClick={() => {
-                        setShowLogin(false);
-                        setShowLoginCard(true);
-                      }}
-                      className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      aria-label="Proceed to login"
-                    >
-                      Log In
-                    </motion.button>
-                    <motion.button
-                      onClick={() => setShowLogin(false)}
-                      className="px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-all duration-200"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      aria-label="Return to browsing"
-                    >
-                      Return
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                variants={modalVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="flex items-center justify-center h-full"
-              >
-                <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full pointer-events-auto">
+                  <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
                   <button
                     className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors p-2"
                     onClick={() => setShowLogin(false)}
@@ -437,7 +406,7 @@ const WomenSaloonIn = () => {
                     </svg>
                   </button>
                   <div className="flex flex-col items-center text-center">
-                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+                    <h2 className="text-xl font-semibold text-gray-800 mb-4">
                       Login Required
                     </h2>
                     <p className="text-sm text-gray-600 mb-6">
@@ -467,97 +436,97 @@ const WomenSaloonIn = () => {
                       </motion.button>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {showCart && orderType === "Product" && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 pointer-events-auto"
-            ref={loginPromptRef}
-            aria-modal="true"
-            role="dialog"
-          >
-            {isMobile ? (
-              <motion.div
-                variants={bottomSheetVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="fixed bottom-0 left-0 right-0 w-full h-[50vh] bg-white rounded-t-2xl shadow-2xl p-6 max-w-md mx-auto pointer-events-auto"
-              >
-                <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
-                <button
-                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors p-2"
-                  onClick={() => setShowCart(false)}
-                  aria-label="Close cart prompt"
+                </motion.div>
+              ) : (
+                <motion.div
+                  variants={modalVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="flex items-center justify-center h-full"
                 >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-                <div className="flex flex-col items-center text-center">
-                  <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                    Product Cart Pending!
-                  </h2>
-                  <p className="text-sm text-gray-600 mb-6">
-                    You need to Finish or Delete from Cart.
-                  </p>
-                  <div className="flex gap-4">
-                    <motion.button
-                      onClick={() => {
-                        setShowCart(false);
-                        setShowLoginCard(true);
-                      }}
-                      className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      aria-label="Proceed to login"
+                  <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full pointer-events-auto">
+                    <button
+                      className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors p-2"
+                      onClick={() => setShowLogin(false)}
+                      aria-label="Close login prompt"
                     >
-                      Log In
-                    </motion.button>
-                    <motion.button
-                      onClick={() => setShowCart(false)}
-                      className="px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-all duration-200"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      aria-label="Return to browsing"
-                    >
-                      Return
-                    </motion.button>
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                    <div className="flex flex-col items-center text-center">
+                      <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+                        Login Required
+                      </h2>
+                      <p className="text-sm text-gray-600 mb-6">
+                        You need to log in to add items to your cart.
+                      </p>
+                      <div className="flex gap-4">
+                        <motion.button
+                          onClick={() => {
+                            setShowLogin(false);
+                            setShowLoginCard(true);
+                          }}
+                          className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          aria-label="Proceed to login"
+                        >
+                          Log In
+                        </motion.button>
+                        <motion.button
+                          onClick={() => setShowLogin(false)}
+                          className="px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-all duration-200"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          aria-label="Return to browsing"
+                        >
+                          Return
+                        </motion.button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                variants={modalVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="flex items-center justify-center h-full"
-              >
-                <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full pointer-events-auto">
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {showCart && orderType === "Product" && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 pointer-events-auto"
+              ref={loginPromptRef}
+              aria-modal="true"
+              role="dialog"
+            >
+              {isMobile ? (
+                <motion.div
+                  variants={bottomSheetVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="fixed bottom-0 left-0 right-0 w-full h-[50vh] bg-white rounded-t-2xl shadow-2xl p-6 max-w-md mx-auto pointer-events-auto"
+                >
+                  <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
                   <button
                     className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors p-2"
                     onClick={() => setShowCart(false)}
@@ -579,7 +548,7 @@ const WomenSaloonIn = () => {
                     </svg>
                   </button>
                   <div className="flex flex-col items-center text-center">
-                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+                    <h2 className="text-xl font-semibold text-gray-800 mb-4">
                       Product Cart Pending!
                     </h2>
                     <p className="text-sm text-gray-600 mb-6">
@@ -588,14 +557,15 @@ const WomenSaloonIn = () => {
                     <div className="flex gap-4">
                       <motion.button
                         onClick={() => {
-                          navigate("/cartpage");
+                          setShowCart(false);
+                          setShowLoginCard(true);
                         }}
                         className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         aria-label="Proceed to login"
                       >
-                        Cart
+                        Log In
                       </motion.button>
                       <motion.button
                         onClick={() => setShowCart(false)}
@@ -608,110 +578,172 @@ const WomenSaloonIn = () => {
                       </motion.button>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+                </motion.div>
+              ) : (
+                <motion.div
+                  variants={modalVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="flex items-center justify-center h-full"
+                >
+                  <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full pointer-events-auto">
+                    <button
+                      className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors p-2"
+                      onClick={() => setShowCart(false)}
+                      aria-label="Close cart prompt"
+                    >
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                    <div className="flex flex-col items-center text-center">
+                      <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+                        Product Cart Pending!
+                      </h2>
+                      <p className="text-sm text-gray-600 mb-6">
+                        You need to Finish or Delete from Cart.
+                      </p>
+                      <div className="flex gap-4">
+                        <motion.button
+                          onClick={() => {
+                            navigate("/cartpage");
+                          }}
+                          className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          aria-label="Proceed to login"
+                        >
+                          Cart
+                        </motion.button>
+                        <motion.button
+                          onClick={() => setShowCart(false)}
+                          className="px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-all duration-200"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          aria-label="Return to browsing"
+                        >
+                          Return
+                        </motion.button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {showLoginCard && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 pointer-events-auto"
-            ref={loginCardRef}
-            aria-modal="true"
-            role="dialog"
-          >
-            {isMobile ? (
-              <motion.div
-                variants={bottomSheetVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="fixed bottom-0 left-0 right-0 w-full h-[70vh] bg-white rounded-t-2xl shadow-2xl p-6 max-w-md mx-auto pointer-events-auto"
-              >
-                <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
-                <LoginCard
-                  onClose={() => setShowLoginCard(false)}
-                  onSubmit={handleLoginSubmit}
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                variants={modalVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="flex items-center justify-center h-full"
-              >
-                <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full pointer-events-auto">
+        <AnimatePresence>
+          {showLoginCard && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 pointer-events-auto"
+              ref={loginCardRef}
+              aria-modal="true"
+              role="dialog"
+            >
+              {isMobile ? (
+                <motion.div
+                  variants={bottomSheetVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="fixed bottom-0 left-0 right-0 w-full h-[70vh] bg-white rounded-t-2xl shadow-2xl p-6 max-w-md mx-auto pointer-events-auto"
+                >
+                  <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
                   <LoginCard
                     onClose={() => setShowLoginCard(false)}
                     onSubmit={handleLoginSubmit}
                   />
-                </div>
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+                </motion.div>
+              ) : (
+                <motion.div
+                  variants={modalVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="flex items-center justify-center h-full"
+                >
+                  <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full pointer-events-auto">
+                    <LoginCard
+                      onClose={() => setShowLoginCard(false)}
+                      onSubmit={handleLoginSubmit}
+                    />
+                  </div>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {showOtpModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 pointer-events-auto"
-            ref={otpModalRef}
-            aria-modal="true"
-            role="dialog"
-          >
-            {isMobile ? (
-              <motion.div
-                variants={bottomSheetVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="fixed bottom-0 left-0 right-0 w-full h-[70vh] bg-white rounded-t-2xl shadow-2xl p-6 max-w-md mx-auto pointer-events-auto"
-              >
-                <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
-                <OtpVerification
-                  phone={pendingPhone}
-                  onSuccess={handleOtpSuccess}
-                  onClose={() => setShowOtpModal(false)}
-                />
-              </motion.div>
-            ) : (
-              <motion.div
-                variants={modalVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="flex items-center justify-center h-full"
-              >
-                <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full pointer-events-auto">
+        <AnimatePresence>
+          {showOtpModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 pointer-events-auto"
+              ref={otpModalRef}
+              aria-modal="true"
+              role="dialog"
+            >
+              {isMobile ? (
+                <motion.div
+                  variants={bottomSheetVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="fixed bottom-0 left-0 right-0 w-full h-[70vh] bg-white rounded-t-2xl shadow-2xl p-6 max-w-md mx-auto pointer-events-auto"
+                >
+                  <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
                   <OtpVerification
                     phone={pendingPhone}
                     onSuccess={handleOtpSuccess}
                     onClose={() => setShowOtpModal(false)}
                   />
-                </div>
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+                </motion.div>
+              ) : (
+                <motion.div
+                  variants={modalVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="flex items-center justify-center h-full"
+                >
+                  <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 max-w-md w-full pointer-events-auto">
+                    <OtpVerification
+                      phone={pendingPhone}
+                      onSuccess={handleOtpSuccess}
+                      onClose={() => setShowOtpModal(false)}
+                    />
+                  </div>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };

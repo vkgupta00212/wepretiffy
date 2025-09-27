@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import PaymentCard from "./paymentCard";
 import PaymentCard2 from "./paymentCard2";
@@ -19,6 +20,7 @@ const PaymentPage = () => {
   } = location.state || {};
 
   const itemTotal = Number(total) || 0;
+  const navigate = useNavigate();
 
   const calculateTotal = () => {
     const rawTotal = itemTotal;
@@ -44,7 +46,6 @@ const PaymentPage = () => {
 
   const UserID = localStorage.getItem("userPhone");
 
-  // ✅ Responsive handling
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
     handleResize();
@@ -52,7 +53,6 @@ const PaymentPage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ✅ Fetch Orders
   const [orders, setOrders] = useState([]);
   const [orderId, setOrderId] = useState(null);
 
@@ -76,8 +76,7 @@ const PaymentPage = () => {
     fetchOrders();
   }, [UserID]);
 
-  // ✅ Razorpay Handler
-  const handleRazorpayPayment = async (amount, coupon) => {
+  const handleRazorpayPayment = async (amount) => {
     if (!isLoggedIn) {
       alert("Please login to continue.");
       return;
@@ -180,15 +179,49 @@ const PaymentPage = () => {
       setLoading(false);
     }
   };
+  const goBack = () => {
+    // Check if user can go back in history
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1); // go back in stack
+    } else {
+      navigate("/"); // fallback route
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10 border-b border-gray-200">
+          <div className="flex items-center justify-start px-4 py-3 sm:px-6">
+            <button
+              onClick={goBack}
+              className="p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Go back"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6 text-gray-600 hover:text-gray-800"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <h2 className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Checkout
+            </h2>
+          </div>
+        </div>
+        <div className="pt-[35px] mb-[10px]">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Checkout</h2>
               <p className="text-sm text-gray-500">
                 Confirm details & complete payment
               </p>
@@ -211,6 +244,7 @@ const PaymentPage = () => {
               }
               selectedAddress={selectedAddress}
               selectedSlot={selectedSlot}
+              calculateTotal={calculateTotal}
             />
           </div>
 
@@ -231,7 +265,6 @@ const PaymentPage = () => {
           </div>
         </div>
 
-        {/* Address Modal */}
         {showAddressModal && (
           <AnimatePresence>
             <motion.div
@@ -279,7 +312,6 @@ const PaymentPage = () => {
           </AnimatePresence>
         )}
 
-        {/* Slot Modal */}
         {showSlotModal && (
           <AnimatePresence>
             <motion.div

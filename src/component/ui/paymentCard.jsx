@@ -4,6 +4,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { IoIosTime } from "react-icons/io";
 import { MdPayment } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { MdEdit } from "react-icons/md";
 
 const PaymentCard = ({
   onSelectAddress,
@@ -11,6 +12,7 @@ const PaymentCard = ({
   onProceedPayment,
   selectedAddress,
   selectedSlot,
+  itemTotal = 0,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -38,6 +40,14 @@ const PaymentCard = ({
       <span className="text-lg font-semibold text-gray-900">{title}</span>
     </div>
   );
+
+  // Dynamic button label
+  const getPaymentButtonLabel = () => {
+    if (!isLoggedIn) return "Login to Continue";
+    if (!selectedAddress) return "Select Address";
+    if (!selectedSlot) return "Select Slot";
+    return `Proceed to Pay`;
+  };
 
   const desktop = (
     <div className="py-8 w-full max-w-lg mx-auto font-sans">
@@ -138,7 +148,7 @@ const PaymentCard = ({
                 : "bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:from-indigo-700 hover:to-purple-700"
             }`}
           >
-            Proceed to Payment
+            {getPaymentButtonLabel()}
           </button>
         </div>
       </div>
@@ -148,20 +158,38 @@ const PaymentCard = ({
   const mobile = (
     <div className="fixed bottom-0 left-0 right-0 z-50">
       {/* Selected Summary Tab */}
-      {(selectedAddress || selectedSlot) && (
-        <div className="mb-2 mx-3 p-3 rounded-lg border border-gray-200 bg-white shadow-md">
-          {selectedAddress && (
-            <p className="text-xs font-medium text-gray-800 truncate">
-              📍 {selectedAddress.FullAddress}
-            </p>
-          )}
-          {selectedSlot && (
-            <p className="text-xs text-gray-600">
-              ⏰ {selectedSlot.day.label}, {selectedSlot.time}
-            </p>
-          )}
-        </div>
-      )}
+      <div className="flex flex-col">
+        {selectedAddress && (
+          <div className="mb-2 mx-3 p-3 rounded-lg border border-gray-200 bg-white shadow-md">
+            {selectedAddress && (
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-medium text-gray-800 truncate">
+                  📍 {selectedAddress.FullAddress}
+                </p>
+                <MdEdit
+                  className="cursor-pointer text-gray-600 hover:text-indigo-600"
+                  onClick={onSelectAddress} // ✅ open address modal
+                />
+              </div>
+            )}
+          </div>
+        )}
+        {selectedSlot && (
+          <div className="mb-2 mx-3 p-3 rounded-lg border border-gray-200 bg-white shadow-md">
+            {selectedSlot && (
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-gray-600">
+                  ⏰ {selectedSlot.day.label}, {selectedSlot.time}
+                </p>
+                <MdEdit
+                  className="cursor-pointer text-gray-600 hover:text-indigo-600"
+                  onClick={onSelectSlot} // ✅ open slot modal
+                />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Bottom Button */}
       <div className="p-4 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg">
@@ -169,13 +197,17 @@ const PaymentCard = ({
           onClick={() => {
             if (!isLoggedIn) {
               navigate("/login");
-            } else {
+            } else if (!selectedAddress) {
               onSelectAddress();
+            } else if (!selectedSlot) {
+              onSelectSlot();
+            } else {
+              onProceedPayment();
             }
           }}
-          className="w-full py-3 rounded-lg font-medium shadow bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:ring-2 focus:ring-indigo-300"
+          className={`w-full py-3 rounded-lg font-medium shadow transition-all focus:ring-2 focus:ring-indigo-300 ${"bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:from-indigo-700 hover:to-purple-700"}`}
         >
-          {isLoggedIn ? "Add Address & Slot" : "Login to Continue"}
+          {getPaymentButtonLabel()}
         </button>
       </div>
     </div>

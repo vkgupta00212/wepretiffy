@@ -112,7 +112,7 @@ const ProductScreen = () => {
         {/* Header + Search Card */}
         <div className="fixed top-0 left-0 w-full bg-white shadow-md z-10 border-b border-gray-200">
           <div className="flex items-center justify-start p-3 sm:px-6">
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => navigate(-1)}
@@ -133,7 +133,7 @@ const ProductScreen = () => {
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-            </motion.button>
+            </motion.button> */}
             <h2 className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               Products
             </h2>

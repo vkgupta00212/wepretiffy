@@ -3,6 +3,7 @@ import { Card, CardContent } from "./card";
 import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import GetSubCategory from "../../backend/subcategory/getsubcategory";
+import { useDelayedNavigate } from "./delayedbutton";
 
 const WomensCard = ({ icon, label, onClick }) => {
   return (
@@ -34,6 +35,7 @@ const WomensSalonCard = ({ onClose, service }) => {
   const navigate = useNavigate();
   const [subServices, setSubServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const delayedNavigate = useDelayedNavigate();
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,6 +1,7 @@
 // PaymentCardButton.jsx
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Sparkles } from "lucide-react";
+import GetOrder from "../../backend/order/getorderid";
 
 const PaymentCardButton = ({
   itemTotal = 0,
@@ -9,6 +10,9 @@ const PaymentCardButton = ({
   loading = false,
 }) => {
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const UserID = localStorage.getItem("userPhone");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fmt = (v) => {
     try {
@@ -22,11 +26,35 @@ const PaymentCardButton = ({
     }
   };
 
-  // total = just sum of items
-  const finalTotal = useMemo(
-    () => calculateTotal(),
-    [calculateTotal, itemTotal]
+  const fetchCart = async () => {
+    if (!UserID) return;
+    setIsLoading(true);
+    try {
+      const data = await GetOrder(UserID, "Pending");
+      console.log("Fetched cart items from the paymentbutton:", data);
+      setCartItems(data);
+    } catch (err) {
+      console.error("Error fetching cart items:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const totalItems = cartItems.reduce(
+    (acc, item) => acc + Number(item.Quantity || 1),
+    0
   );
+
+  const finalTotal = useMemo(() => {
+    return cartItems.reduce(
+      (acc, item) => acc + Number(item.Price) * Number(item.Quantity),
+      0
+    );
+  }, [cartItems]);
 
   return (
     <div className="w-full max-w-md mx-auto p-5 bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -53,41 +81,19 @@ const PaymentCardButton = ({
       <div className="space-y-3 text-sm text-gray-700">
         <div className="flex justify-between items-center">
           <span className="font-medium">Items Total</span>
-          <span className="text-gray-900 font-semibold">{fmt(itemTotal)}</span>
+          <span className="text-gray-900 font-semibold">{fmt(finalTotal)}</span>
         </div>
 
         <hr className="my-2 border-gray-200" />
 
-        <div className="flex justify-between items-center font-semibold text-gray-800">
-          <span>Total Amount</span>
-          <span className="text-indigo-500">{fmt(finalTotal)}</span>
-        </div>
-
-        {/* Toggle Breakdown */}
-        <div className="flex items-center justify-between gap-3 mt-3">
-          <button
-            onClick={() => setShowBreakdown((s) => !s)}
-            className="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium hover:shadow-sm transition"
-            aria-expanded={showBreakdown}
-          >
-            {showBreakdown ? "Hide Details" : "View Details"}
-          </button>
-        </div>
-
-        {/* Breakdown Expanded */}
-        {showBreakdown && (
-          <div className="mt-3 p-3 bg-gray-50 border border-gray-100 rounded-lg text-xs text-gray-600 space-y-2">
-            <div className="flex justify-between">
-              <span>Items</span>
-              <span>{fmt(itemTotal)}</span>
-            </div>
-            <hr className="border-gray-200" />
-            <div className="flex justify-between font-semibold">
-              <span>Payable</span>
-              <span>{fmt(finalTotal)}</span>
-            </div>
+        <div className="text-right">
+          <div className="text-sm text-gray-500">
+            Subtotal ({totalItems} items)
           </div>
-        )}
+          <div className="text-lg font-semibold text-indigo-600">
+            {fmt(finalTotal)}
+          </div>
+        </div>
       </div>
 
       {/* Proceed Button */}
