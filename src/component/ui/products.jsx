@@ -145,7 +145,7 @@ const ProductScreen = () => {
           initial="hidden"
           animate="visible"
           transition={{ duration: 0.5 }}
-          className="flex flex-row md:flex-row md:items-center justify-between mt-5 mb-2 gap-3"
+          className="flex flex-row md:flex-row md:items-center justify-between mt-[30px] mb-2 gap-3"
         >
           <div className="w-full md:w-1/3">
             <div className="w-[320px] md:w-[500px] mx-auto p-[3px]">

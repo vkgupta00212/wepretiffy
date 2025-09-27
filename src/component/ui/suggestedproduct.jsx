@@ -115,7 +115,7 @@ const SuggestProductScreen = () => {
           {loaded && services.length > 0 && currentSlide > 0 && (
             <button
               onClick={handlePrev}
-              className="absolute left-[-12px] sm:left-[-20px] md:left-[-24px] lg:left-[-28px] top-1/2 z-20 transform -translate-y-1/2 bg-white text-gray-700 p-3 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-200"
+              className="absolute left-[-12px] sm:left-[-20px] md:left-[-24px] lg:left-[-28px] top-1/2 z-20 transform -translate-y-1/2 bg-black text-white p-3 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-200"
               aria-label="Previous slide"
             >
               <ChevronLeft size={24} />
@@ -124,7 +124,7 @@ const SuggestProductScreen = () => {
           {loaded && services.length > 0 && currentSlide < maxSlide && (
             <button
               onClick={handleNext}
-              className="absolute right-[-12px] sm:right-[-20px] md:right-[-24px] lg:right-[-28px] top-1/2 z-20 transform -translate-y-1/2 bg-white text-gray-700 p-3 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-200"
+              className="absolute right-[-12px] sm:right-[-20px] md:right-[-24px] lg:right-[-28px] top-1/2 z-20 transform -translate-y-1/2 bg-black text-white p-3 rounded-full shadow-lg hover:bg-gray-100 transition-all duration-200"
               aria-label="Next slide"
             >
               <ChevronRight size={24} />
