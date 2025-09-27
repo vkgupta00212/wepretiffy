@@ -138,9 +138,6 @@ const ProductScreen = () => {
               Products
             </h2>
           </div>
-        </div>
-
-        <div className="pt-[60px]">
           <motion.div
             variants={headerVariants}
             initial="hidden"
@@ -175,7 +172,9 @@ const ProductScreen = () => {
               </div>
             </motion.div>
           </motion.div>
+        </div>
 
+        <div className="pt-[60px]">
           {/* Error Message */}
           {error && (
             <motion.div
