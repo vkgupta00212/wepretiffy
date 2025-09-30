@@ -2,7 +2,7 @@ import React from "react";
 
 const ServicePromoCard = ({ title, subtitle, image }) => {
   return (
-    <div className="m-2 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
+    <div className="m-2 p-2 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
       <div
         className="relative w-full h-[220px] sm:h-[225px] md:h-[250px] lg:h-[280px] xl:h-[300px] rounded-xl overflow-hidden shadow-lg"
         style={{

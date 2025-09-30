@@ -75,7 +75,7 @@ const PromocardSection = () => {
       id="services"
       className="py-5 bg-gradient-to-b from-white to-gray-50"
     >
-      <div className="w-[450px] p-[1px]">
+      <div className="w-full  md:ml-[120px] md:w-[1250px] p-[1px]">
         {/* Section Header */}
         <div className="mb-3">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">
